@@ -2,7 +2,8 @@
   "name": "pruebas-cloudflare",
   "private": true,
   "scripts": {
-    "dev": "npx wrangler@latest dev",
-    "deploy": "npx wrangler@latest deploy"
+    "build": "node scripts/build.mjs",
+    "dev": "npm run build && npx wrangler@latest dev",
+    "deploy": "npm run build && npx wrangler@latest deploy"
   }
 }
