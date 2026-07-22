@@ -1,0 +1,2142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Formulario dinámico para recopilar solicitudes de gestión de e-commerce." />
+  <title>Solicitud de gestión e-commerce</title>
+
+  <style>
+    :root {
+      --primary: #0b63ce;
+      --primary-dark: #084a9b;
+      --primary-soft: #eaf3ff;
+      --cyan: #15b8d6;
+      --cyan-soft: #e8fbff;
+      --success: #119c67;
+      --warning: #f59e0b;
+      --danger: #dc3545;
+      --text: #172033;
+      --text-soft: #657086;
+      --border: #dce4ef;
+      --surface: #ffffff;
+      --surface-soft: #f6f9fc;
+      --page: #eef3f8;
+      --shadow: 0 18px 45px rgba(17, 36, 64, 0.10);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(21, 184, 214, 0.12), transparent 28rem),
+        linear-gradient(180deg, #f8fbff 0%, var(--page) 100%);
+      min-height: 100vh;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .page-shell {
+      width: min(1440px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 56px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-mark {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--cyan));
+      box-shadow: 0 12px 25px rgba(11, 99, 206, 0.24);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.2;
+    }
+
+    .brand p {
+      margin: 4px 0 0;
+      color: var(--text-soft);
+      font-size: 0.88rem;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid #cfe9ef;
+      background: rgba(255, 255, 255, 0.84);
+      color: #0f6678;
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--cyan);
+      box-shadow: 0 0 0 5px rgba(21, 184, 214, 0.12);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+      padding: 34px;
+      color: white;
+      background:
+        linear-gradient(135deg, rgba(4, 54, 117, 0.98), rgba(11, 99, 206, 0.94) 55%, rgba(21, 184, 214, 0.88));
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .hero::before {
+      width: 260px;
+      height: 260px;
+      right: -70px;
+      top: -110px;
+    }
+
+    .hero::after {
+      width: 150px;
+      height: 150px;
+      right: 160px;
+      bottom: -90px;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.7fr);
+      gap: 28px;
+      align-items: end;
+    }
+
+    .hero-label {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .hero h2 {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 1.02;
+      letter-spacing: -0.055em;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 18px 0 0;
+      color: rgba(255, 255, 255, 0.84);
+      line-height: 1.65;
+      font-size: 1rem;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stat {
+      padding: 18px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(10px);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.45rem;
+      margin-bottom: 4px;
+    }
+
+    .stat span {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .app-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .main-card,
+    .sidebar-card {
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid rgba(220, 228, 239, 0.95);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    .main-card {
+      overflow: hidden;
+    }
+
+    .stepper {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      padding: 18px 20px;
+      background: #f9fbfd;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      color: #7a869c;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      flex: 0 0 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: white;
+      transition: 0.25s ease;
+    }
+
+    .step-item.active {
+      color: var(--primary);
+    }
+
+    .step-item.active .step-number {
+      color: white;
+      border-color: var(--primary);
+      background: var(--primary);
+      box-shadow: 0 8px 18px rgba(11, 99, 206, 0.22);
+    }
+
+    .step-item.complete {
+      color: var(--success);
+    }
+
+    .step-item.complete .step-number {
+      color: white;
+      border-color: var(--success);
+      background: var(--success);
+    }
+
+    .form-step {
+      display: none;
+      padding: 32px;
+      animation: fadeUp 0.35s ease;
+    }
+
+    .form-step.active {
+      display: block;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section-heading {
+      margin-bottom: 24px;
+    }
+
+    .section-heading .eyebrow {
+      display: inline-block;
+      color: var(--primary);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .section-heading h3 {
+      margin: 0;
+      font-size: clamp(1.45rem, 3vw, 2.1rem);
+      letter-spacing: -0.035em;
+    }
+
+    .section-heading p {
+      margin: 10px 0 0;
+      color: var(--text-soft);
+      line-height: 1.6;
+      max-width: 780px;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label,
+    .group-label {
+      font-size: 0.88rem;
+      font-weight: 750;
+      color: #26324a;
+    }
+
+    .required::after {
+      content: " *";
+      color: var(--danger);
+    }
+
+    .input,
+    .select,
+    .textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--text);
+      border-radius: 12px;
+      outline: none;
+      transition: 0.2s ease;
+    }
+
+    .input,
+    .select {
+      min-height: 48px;
+      padding: 0 14px;
+    }
+
+    .textarea {
+      min-height: 120px;
+      padding: 14px;
+      resize: vertical;
+      line-height: 1.55;
+    }
+
+    .input:focus,
+    .select:focus,
+    .textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(11, 99, 206, 0.11);
+    }
+
+    .helper {
+      color: var(--text-soft);
+      font-size: 0.78rem;
+      line-height: 1.45;
+    }
+
+    .needs-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .need-group {
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fbfdff 0%, #f6f9fc 100%);
+    }
+
+    .need-group-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      margin-bottom: 16px;
+    }
+
+    .need-group-number {
+      width: 40px;
+      height: 40px;
+      flex: 0 0 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--cyan));
+      font-size: 0.76rem;
+      font-weight: 850;
+      box-shadow: 0 8px 18px rgba(11, 99, 206, 0.18);
+    }
+
+    .need-group-head strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 1rem;
+    }
+
+    .need-group-head p {
+      margin: 0;
+      color: var(--text-soft);
+      font-size: 0.79rem;
+      line-height: 1.48;
+    }
+
+    .need-group-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .need-card {
+      position: relative;
+      display: flex;
+      gap: 14px;
+      min-height: 132px;
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: white;
+      cursor: pointer;
+      transition: 0.22s ease;
+    }
+
+    .need-card:hover {
+      transform: translateY(-2px);
+      border-color: #b8d5f8;
+      box-shadow: 0 12px 25px rgba(25, 52, 92, 0.08);
+    }
+
+    .need-card.selected {
+      border-color: var(--primary);
+      background: linear-gradient(180deg, #ffffff 0%, #f2f7ff 100%);
+      box-shadow: 0 12px 28px rgba(11, 99, 206, 0.13);
+    }
+
+    .need-card input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .need-icon {
+      width: 46px;
+      height: 46px;
+      flex: 0 0 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+
+    .need-card.selected .need-icon {
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--cyan));
+    }
+
+    .need-copy {
+      min-width: 0;
+    }
+
+    .need-copy strong {
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 7px;
+    }
+
+    .need-copy span {
+      display: block;
+      color: var(--text-soft);
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .checkmark {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      color: transparent;
+      background: white;
+      transition: 0.2s ease;
+    }
+
+    .need-card.selected .checkmark {
+      color: white;
+      border-color: var(--success);
+      background: var(--success);
+    }
+
+    .dynamic-empty {
+      padding: 34px;
+      text-align: center;
+      border: 1px dashed #c7d4e4;
+      border-radius: 18px;
+      background: var(--surface-soft);
+      color: var(--text-soft);
+    }
+
+    .dynamic-empty strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .dynamic-group-list {
+      display: grid;
+      gap: 22px;
+    }
+
+    .dynamic-group {
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 19px;
+      background: linear-gradient(180deg, #f8fbff 0%, #f4f7fb 100%);
+    }
+
+    .dynamic-group-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      margin-bottom: 16px;
+    }
+
+    .dynamic-group-head strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 1rem;
+    }
+
+    .dynamic-group-head p {
+      margin: 0;
+      color: var(--text-soft);
+      font-size: 0.78rem;
+      line-height: 1.48;
+    }
+
+    .accordion-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .accordion {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      background: white;
+    }
+
+    .accordion-head {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 18px;
+      border: 0;
+      color: var(--text);
+      background: white;
+      text-align: left;
+    }
+
+    .accordion-head:hover {
+      background: #f9fbfd;
+    }
+
+    .accordion-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .accordion-title .mini-icon {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      background: var(--cyan-soft);
+      color: #0b7d95;
+      font-weight: 800;
+    }
+
+    .accordion-title strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .accordion-title small {
+      color: var(--text-soft);
+      font-weight: 500;
+    }
+
+    .accordion-arrow {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      background: var(--surface-soft);
+      color: var(--text-soft);
+      transition: 0.2s ease;
+    }
+
+    .accordion.open .accordion-arrow {
+      transform: rotate(180deg);
+      color: white;
+      background: var(--primary);
+    }
+
+    .accordion-body {
+      display: none;
+      padding: 0 18px 20px;
+      border-top: 1px solid var(--border);
+      background: #fcfdff;
+    }
+
+    .accordion.open .accordion-body {
+      display: block;
+      animation: fadeUp 0.25s ease;
+    }
+
+    .questions-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      padding-top: 18px;
+    }
+
+    .choice-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .choice {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 0 13px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: white;
+      font-size: 0.84rem;
+      cursor: pointer;
+    }
+
+    .choice:has(input:checked) {
+      color: var(--primary);
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      font-weight: 700;
+    }
+
+    .choice input {
+      accent-color: var(--primary);
+    }
+
+    .upload-box {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 150px;
+      padding: 22px;
+      text-align: center;
+      border: 1.5px dashed #b8c7da;
+      border-radius: 16px;
+      background: #f9fbfd;
+      transition: 0.2s ease;
+    }
+
+    .upload-box:hover {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .upload-box input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .upload-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 10px;
+      border-radius: 14px;
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--cyan));
+      font-size: 1.3rem;
+    }
+
+    .upload-box strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .upload-box span {
+      color: var(--text-soft);
+      font-size: 0.8rem;
+      line-height: 1.45;
+    }
+
+    .file-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .file-chip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: white;
+      font-size: 0.8rem;
+    }
+
+    .repeat-card {
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: white;
+    }
+
+    .repeat-card + .repeat-card {
+      margin-top: 12px;
+    }
+
+    .repeat-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .repeat-head strong {
+      font-size: 0.92rem;
+    }
+
+    .icon-button {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--danger);
+      background: white;
+    }
+
+    .add-button {
+      width: 100%;
+      margin-top: 14px;
+      min-height: 46px;
+      border: 1px dashed #9ebce0;
+      border-radius: 12px;
+      color: var(--primary);
+      background: #f5f9ff;
+      font-weight: 750;
+    }
+
+    .summary-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .summary-block {
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: white;
+    }
+
+    .summary-block h4 {
+      margin: 0 0 12px;
+      font-size: 0.96rem;
+    }
+
+    .summary-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .summary-tag {
+      padding: 8px 11px;
+      border-radius: 999px;
+      color: var(--primary);
+      background: var(--primary-soft);
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .summary-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .summary-list li {
+      display: grid;
+      grid-template-columns: 170px minmax(0, 1fr);
+      gap: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #edf1f6;
+      font-size: 0.84rem;
+    }
+
+    .summary-list li:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .summary-list span:first-child {
+      color: var(--text-soft);
+    }
+
+    .form-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 20px 32px;
+      border-top: 1px solid var(--border);
+      background: #fbfcfe;
+    }
+
+    .action-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      font-weight: 760;
+      transition: 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      border-color: var(--border);
+      color: var(--text);
+      background: white;
+    }
+
+    .btn-primary {
+      color: white;
+      background: linear-gradient(135deg, var(--primary), #1580db);
+      box-shadow: 0 10px 22px rgba(11, 99, 206, 0.22);
+    }
+
+    .btn-success {
+      color: white;
+      background: linear-gradient(135deg, var(--success), #16b87c);
+      box-shadow: 0 10px 22px rgba(17, 156, 103, 0.2);
+    }
+
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 18px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .sidebar-card {
+      padding: 20px;
+    }
+
+    .sidebar-card h4 {
+      margin: 0 0 15px;
+      font-size: 0.95rem;
+    }
+
+    .progress-shell {
+      height: 10px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e8eef5;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 25%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--primary), var(--cyan));
+      transition: width 0.3s ease;
+    }
+
+    .progress-copy {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 9px;
+      color: var(--text-soft);
+      font-size: 0.78rem;
+    }
+
+    .selected-list {
+      display: grid;
+      gap: 9px;
+    }
+
+    .selected-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      padding: 10px 11px;
+      border-radius: 11px;
+      background: var(--surface-soft);
+      font-size: 0.78rem;
+      line-height: 1.4;
+    }
+
+    .selected-bullet {
+      width: 8px;
+      height: 8px;
+      margin-top: 4px;
+      flex: 0 0 8px;
+      border-radius: 50%;
+      background: var(--cyan);
+    }
+
+    .sidebar-note {
+      padding: 15px;
+      border-radius: 14px;
+      color: #145366;
+      background: var(--cyan-soft);
+      border: 1px solid #c6edf4;
+      font-size: 0.8rem;
+      line-height: 1.55;
+    }
+
+    .contact-card {
+      display: grid;
+      gap: 10px;
+    }
+
+    .contact-line {
+      display: flex;
+      gap: 10px;
+      color: var(--text-soft);
+      font-size: 0.8rem;
+    }
+
+    .contact-line strong {
+      color: var(--text);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 50;
+      min-width: 280px;
+      max-width: 420px;
+      padding: 16px 18px;
+      border-radius: 14px;
+      color: white;
+      background: #172033;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
+      transform: translateY(140%);
+      opacity: 0;
+      transition: 0.3s ease;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .toast span {
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 0.82rem;
+    }
+
+    .notice {
+      padding: 14px 16px;
+      border-radius: 13px;
+      color: #76500c;
+      background: #fff8e9;
+      border: 1px solid #f8dfad;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    @media (max-width: 1080px) {
+      .app-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .hero-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page-shell {
+        width: min(100% - 18px, 1440px);
+        padding-top: 14px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+      }
+
+      .status-pill {
+        display: none;
+      }
+
+      .hero {
+        padding: 24px 20px;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .stepper {
+        grid-template-columns: repeat(4, minmax(44px, 1fr));
+      }
+
+      .step-item span:last-child {
+        display: none;
+      }
+
+      .form-step {
+        padding: 22px 16px;
+      }
+
+      .form-actions {
+        padding: 16px;
+      }
+
+      .field-grid,
+      .questions-grid,
+      .sidebar,
+      .need-group-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-list li {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+
+      .action-group {
+        width: 100%;
+      }
+
+      .action-group .btn,
+      .form-actions > .btn {
+        flex: 1;
+      }
+
+      .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+
+    .question-heading {
+      grid-column: 1 / -1;
+      margin-top: 8px;
+      padding: 15px 16px;
+      border-left: 4px solid var(--primary);
+      border-radius: 10px;
+      background: var(--primary-soft);
+    }
+
+    .question-heading strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--primary-dark);
+      font-size: 0.92rem;
+    }
+
+    .question-heading span {
+      color: var(--text-soft);
+      font-size: 0.78rem;
+      line-height: 1.45;
+    }
+
+    .condition-field {
+      display: none;
+    }
+
+    .condition-field.visible {
+      display: flex;
+      animation: fadeUp 0.22s ease;
+    }
+
+    .required-label::after {
+      content: " *";
+      color: var(--danger);
+    }
+
+    .module-summary {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .module-summary:first-child {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .module-summary h5 {
+      margin: 0 0 11px;
+      font-size: 0.9rem;
+    }
+
+    .answer-row {
+      display: grid;
+      grid-template-columns: minmax(190px, 0.7fr) minmax(0, 1.3fr);
+      gap: 12px;
+      margin-bottom: 8px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: var(--surface-soft);
+      font-size: 0.78rem;
+      line-height: 1.45;
+    }
+
+    .answer-row span {
+      color: var(--text-soft);
+    }
+
+    @media (max-width: 760px) {
+      .answer-row {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">EC</div>
+        <div>
+          <h1>Gestión de e-commerce</h1>
+          <p>Formulario de solicitudes y actualización web</p>
+        </div>
+      </div>
+
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        Formulario disponible
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-content">
+        <div>
+          <span class="hero-label">Solicitud organizada y completa</span>
+          <h2>Genera una solicitud completa sin reuniones adicionales.</h2>
+          <p>
+            Selecciona el trabajo que necesitas, adjunta catálogos, listas de precios, imágenes o documentos y responde las preguntas condicionales. El objetivo es que la petición contenga toda la información necesaria para ejecutar el trabajo sin solicitar aclaraciones posteriores.
+          </p>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat">
+            <strong>4 pasos</strong>
+            <span>Proceso guiado y sencillo</span>
+          </div>
+          <div class="stat">
+            <strong>6 solicitudes</strong>
+            <span>Organizadas en 3 grupos</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="app-layout">
+      <main class="main-card">
+        <div class="stepper">
+          <div class="step-item active" data-step-indicator="1">
+            <div class="step-number">1</div>
+            <span>Datos iniciales</span>
+          </div>
+          <div class="step-item" data-step-indicator="2">
+            <div class="step-number">2</div>
+            <span>Necesidades</span>
+          </div>
+          <div class="step-item" data-step-indicator="3">
+            <div class="step-number">3</div>
+            <span>Información</span>
+          </div>
+          <div class="step-item" data-step-indicator="4">
+            <div class="step-number">4</div>
+            <span>Revisión</span>
+          </div>
+        </div>
+
+        <form id="ecommerceForm">
+          <section class="form-step active" data-step="1">
+            <div class="section-heading">
+              <span class="eyebrow">Paso 1</span>
+              <h3>Información de la empresa</h3>
+              <p>
+                Estos datos permiten identificar la solicitud, asignarla correctamente y contactar a la persona encargada.
+              </p>
+            </div>
+
+            <div class="field-grid">
+              <div class="field">
+                <label class="required" for="companyName">Nombre de la empresa</label>
+                <input class="input" id="companyName" name="companyName" type="text" placeholder="Ej. Importaciones LED" required />
+              </div>
+
+              <div class="field">
+                <label for="website">Página web</label>
+                <input class="input" id="website" name="website" type="url" placeholder="https://www.ejemplo.com" />
+              </div>
+
+              <div class="field">
+                <label class="required" for="contactName">Nombre del responsable</label>
+                <input class="input" id="contactName" name="contactName" type="text" placeholder="Nombre y apellido" required />
+              </div>
+
+              <div class="field">
+                <label class="required" for="contactRole">Cargo</label>
+                <input class="input" id="contactRole" name="contactRole" type="text" placeholder="Ej. Coordinador comercial" required />
+              </div>
+
+              <div class="field">
+                <label class="required" for="email">Correo electrónico</label>
+                <input class="input" id="email" name="email" type="email" placeholder="correo@empresa.com" required />
+              </div>
+
+              <div class="field">
+                <label class="required" for="phone">Teléfono o WhatsApp</label>
+                <input class="input" id="phone" name="phone" type="tel" placeholder="+57 300 000 0000" required />
+              </div>
+
+              <div class="field">
+                <label for="requestDate">Fecha esperada de publicación</label>
+                <input class="input" id="requestDate" name="requestDate" type="date" />
+              </div>
+
+              <div class="field">
+                <label for="generalPriority">Prioridad general</label>
+                <select class="select" id="generalPriority" name="generalPriority">
+                  <option value="">Seleccionar prioridad</option>
+                  <option>Normal</option>
+                  <option>Alta</option>
+                  <option>Urgente</option>
+                </select>
+              </div>
+
+              <div class="field full">
+                <label for="generalContext">Descripción general de la necesidad</label>
+                <textarea class="textarea" id="generalContext" name="generalContext" placeholder="Explique brevemente qué necesita realizar en la página web y cuál es el objetivo del cambio."></textarea>
+              </div>
+            </div>
+          </section>
+
+          <section class="form-step" data-step="2">
+            <div class="section-heading">
+              <span class="eyebrow">Paso 2</span>
+              <h3>Selecciona el grupo y el trabajo que necesitas</h3>
+              <p>
+                Las solicitudes están agrupadas por relación. Puedes elegir varias opciones y el siguiente paso mostrará solo las preguntas correspondientes.
+              </p>
+            </div>
+
+            <div class="needs-grid" id="needsGrid"></div>
+          </section>
+
+          <section class="form-step" data-step="3">
+            <div class="section-heading">
+              <span class="eyebrow">Paso 3</span>
+              <h3>Completa la información de tu solicitud</h3>
+              <p>
+                Abre cada sección, responde las preguntas y adjunta los documentos disponibles.
+              </p>
+            </div>
+
+            <div class="notice">
+              Este módulo está pensado para reemplazar la reunión de levantamiento. Las preguntas cambian según la fuente seleccionada, por ejemplo catálogo PDF, lista de precios, CSV, enlaces o archivos individuales. Cuando un dato no exista, indica si debe buscarse, crearse, ocultarse, dejarse pendiente o impedir la publicación.
+            </div>
+
+            <div id="dynamicSections">
+              <div class="dynamic-empty">
+                <strong>No hay áreas seleccionadas</strong>
+                Regresa al paso anterior y selecciona al menos una necesidad.
+              </div>
+            </div>
+          </section>
+
+          <section class="form-step" data-step="4">
+            <div class="section-heading">
+              <span class="eyebrow">Paso 4</span>
+              <h3>Revisa la solicitud antes de finalizar</h3>
+              <p>
+                Verifica que las áreas seleccionadas, los datos de contacto y la prioridad sean correctos.
+              </p>
+            </div>
+
+            <div class="summary-grid" id="summaryContent"></div>
+          </section>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" id="prevBtn" disabled>Anterior</button>
+
+            <div class="action-group">
+              <button type="button" class="btn btn-secondary" id="saveDraftBtn">Guardar visualmente</button>
+              <button type="button" class="btn btn-primary" id="nextBtn">Continuar</button>
+              <button type="submit" class="btn btn-success" id="submitBtn" hidden>Finalizar solicitud</button>
+            </div>
+          </div>
+        </form>
+      </main>
+
+      <aside class="sidebar">
+        <section class="sidebar-card">
+          <h4>Progreso del formulario</h4>
+          <div class="progress-shell">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <div class="progress-copy">
+            <span id="progressText">Paso 1 de 4</span>
+            <strong id="progressPercent">25%</strong>
+          </div>
+        </section>
+
+        <section class="sidebar-card">
+          <h4>Áreas seleccionadas</h4>
+          <div class="selected-list" id="selectedList">
+            <div class="selected-item">
+              <span class="selected-bullet"></span>
+              <span>Aún no has seleccionado ninguna necesidad.</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="sidebar-card">
+          <h4>Recomendación</h4>
+          <div class="sidebar-note">
+            Para agilizar la gestión, adjunta listas de precios, imágenes, fichas técnicas y catálogos con nombres claros y referencias correctas.
+          </div>
+        </section>
+
+        <section class="sidebar-card contact-card">
+          <h4>Canales de atención</h4>
+          <div class="contact-line">
+            <span>✉</span>
+            <div>
+              <strong>Correo</strong>
+              gestion@tuempresa.com
+            </div>
+          </div>
+          <div class="contact-line">
+            <span>☎</span>
+            <div>
+              <strong>WhatsApp</strong>
+              +57 300 000 0000
+            </div>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">
+    <strong id="toastTitle">Información guardada</strong>
+    <span id="toastMessage">La información se conserva temporalmente en este navegador.</span>
+  </div>
+
+  <script>
+    const needGroups = [{"id":"products","icon":"01","title":"Productos y catálogo","description":"Solicitudes para subir productos, actualizar información, modificar precios y organizar categorías."},{"id":"design","icon":"02","title":"Diseño y contenido visual","description":"Solicitudes de banners y elementos gráficos para la tienda."},{"id":"followup","icon":"03","title":"Seguimiento periódico","description":"Revisión mensual de cambios, novedades y trabajos prioritarios."}];
+
+    const needs = [{"id":"new_products","group":"products","icon":"NP","title":"Productos nuevos","description":"Carga de productos desde catálogos, listas de precios, archivos, páginas o fuentes relacionadas."},{"id":"product_updates","group":"products","icon":"UP","title":"Actualización de productos existentes","description":"Cambios sobre productos ya publicados usando todas las fuentes necesarias."},{"id":"pricing","group":"products","icon":"$","title":"Administración de precios","description":"Actualizaciones generales o específicas, fórmulas, promociones y productos bajo consulta."},{"id":"categories","group":"products","icon":"CT","title":"Categorías y subcategorías","description":"Creación, reorganización, imágenes y orden de la estructura del catálogo."},{"id":"banners","group":"design","icon":"BG","title":"Banners y elementos gráficos","description":"Piezas visuales para inicio, categorías, productos, marcas, formularios y otras ubicaciones."},{"id":"monthly","group":"followup","icon":"ME","title":"Revisión mensual","description":"Novedades periódicas de productos, precios, campañas, errores y prioridades."}];
+
+    const sectionDefinitions = {"new_products":{"title":"Productos nuevos","subtitle":"Carga y publicación desde la fuente principal entregada por el cliente.","questions":[{"type":"heading","title":"Fuente principal","text":"La fuente adjunta será la base para identificar productos, precios, descripciones, imágenes y demás información."},{"key":"source_type","label":"1. ¿Cuál es la fuente principal de los productos?","type":"radio","required":true,"options":["Catálogo PDF","Lista de precios Excel","Catálogo y lista de precios","Archivo Excel o CSV","Página del fabricante","Carpeta o ZIP de archivos","Otra fuente"]},{"key":"source_files","label":"Adjunta la fuente principal de los productos","type":"upload","required":true,"accept":".pdf,.xlsx,.xls,.csv,.zip,.doc,.docx,.jpg,.jpeg,.png,.webp","showWhen":{"key":"source_type","values":["Catálogo PDF","Lista de precios Excel","Catálogo y lista de precios","Archivo Excel o CSV","Carpeta o ZIP de archivos","Otra fuente"]}},{"key":"source_url","label":"Ingresa la página del fabricante","type":"text","inputType":"url","required":true,"showWhen":{"key":"source_type","values":["Página del fabricante"]},"placeholder":"https://..."},{"key":"source_other_name","label":"Indica cuál es la otra fuente","type":"textarea","required":true,"showWhen":{"key":"source_type","values":["Otra fuente"]},"placeholder":"Explica qué contiene la fuente y cómo debe utilizarse."},{"key":"catalog_contents","label":"2. ¿Qué información contiene el catálogo?","type":"checkbox","required":true,"showWhen":{"key":"source_type","values":["Catálogo PDF","Catálogo y lista de precios"]},"options":["Códigos o referencias","Nombres de producto","Precios","Descripciones","Características técnicas","Categorías","Subcategorías","Marcas","Unidad de venta","Disponibilidad","Imágenes"]},{"key":"publish_scope","label":"3. ¿Se deben publicar todos los productos encontrados?","type":"radio","required":true,"options":["Sí, todos","No, solo algunos","Solo los productos nuevos","Solo determinadas páginas, marcas o categorías"]},{"key":"publish_selection","label":"Especifica cuáles productos deben publicarse","type":"textarea","required":true,"showWhen":{"key":"publish_scope","values":["No, solo algunos","Solo los productos nuevos","Solo determinadas páginas, marcas o categorías"]},"placeholder":"Indica páginas, códigos, referencias, marcas, categorías o criterios de selección."},{"key":"existing_rule","label":"4. ¿Cómo se debe determinar si un producto ya existe en la página?","type":"radio","required":true,"options":["Por código o SKU","Por nombre","Por código y nombre","Mediante una lista entregada por el cliente","Revisión manual en la página"]},{"type":"heading","title":"Nombres, imágenes y códigos","text":"Define cómo construir la publicación cuando la fuente no tenga toda la información."},{"key":"name_source","label":"5. ¿De dónde debe tomarse el nombre del producto?","type":"radio","required":true,"options":["De la fuente que se está subiendo","Debe construirse con características","De otra fuente"]},{"key":"name_structure","label":"Indica cómo debe construirse el nombre del producto","type":"textarea","required":true,"showWhen":{"key":"name_source","values":["Debe construirse con características"]},"placeholder":"Ejemplo: tipo de producto + potencia + voltaje + color + medida + marca."},{"key":"name_other_source","label":"Ingresa o adjunta la otra fuente para los nombres","type":"upload","required":true,"showWhen":{"key":"name_source","values":["De otra fuente"]},"accept":".pdf,.xlsx,.xls,.csv,.zip,.doc,.docx,.jpg,.jpeg,.png"},{"key":"name_other_source_note","label":"Explica cómo debe utilizarse la otra fuente para los nombres","type":"textarea","required":true,"showWhen":{"key":"name_source","values":["De otra fuente"]},"placeholder":"Indica la columna, página, sección o criterio que contiene el nombre correcto."},{"key":"image_source","label":"6. ¿De dónde se deben extraer las imágenes para los productos?","type":"radio","required":true,"options":["De la fuente que se está subiendo","De la página del fabricante","De una carpeta o ZIP de imágenes","De otra fuente","Los productos no tienen imágenes"]},{"key":"image_manufacturer_url","label":"Ingresa la página del fabricante para obtener las imágenes","type":"text","inputType":"url","required":true,"showWhen":{"key":"image_source","values":["De la página del fabricante"]},"placeholder":"https://..."},{"key":"image_folder_upload","label":"Adjunta la carpeta o ZIP de imágenes","type":"upload","required":true,"showWhen":{"key":"image_source","values":["De una carpeta o ZIP de imágenes"]},"accept":".zip,.jpg,.jpeg,.png,.webp"},{"key":"image_other_upload","label":"Adjunta la otra fuente de imágenes","type":"upload","required":true,"showWhen":{"key":"image_source","values":["De otra fuente"]},"accept":".zip,.pdf,.jpg,.jpeg,.png,.webp,.xlsx,.xls,.csv"},{"key":"codes_available","label":"7. ¿Todos los productos tienen código o referencia?","type":"radio","required":true,"options":["Sí","No"]},{"type":"heading","title":"Descripciones y características","text":"Aclara qué contenido puede usarse y cómo completar lo que falte."},{"key":"description_available","label":"8. Después de revisar la fuente, ¿los productos tienen una descripción utilizable?","type":"radio","required":true,"options":["Sí, todos","No tienen","Solo algunos"]},{"key":"description_source","label":"9. ¿De dónde debe obtenerse o crearse la descripción?","type":"radio","required":true,"options":["De esta fuente","De la página del fabricante","De una fuente diferente","De la misma fuente usada para el nombre del producto"]},{"key":"description_manufacturer_url","label":"Ingresa la página del fabricante para obtener la descripción","type":"text","inputType":"url","required":true,"showWhen":{"key":"description_source","values":["De la página del fabricante"]},"placeholder":"https://..."},{"key":"description_other_upload","label":"Adjunta la fuente diferente para las descripciones","type":"upload","required":true,"showWhen":{"key":"description_source","values":["De una fuente diferente"]},"accept":".pdf,.xlsx,.xls,.csv,.zip,.doc,.docx,.jpg,.jpeg,.png"},{"key":"description_other_note","label":"Explica cómo debe utilizarse la fuente diferente","type":"textarea","required":true,"showWhen":{"key":"description_source","values":["De una fuente diferente"]},"placeholder":"Indica páginas, columnas o reglas para crear la descripción."},{"key":"missing_feature","label":"10. ¿Qué hacer cuando falte una característica técnica?","type":"radio","required":true,"options":["Omitir la característica","Buscarla en la página del fabricante","Tomarla de otra fuente","Dejar el producto pendiente","No publicar el producto"]},{"key":"feature_other_source","label":"Adjunta la fuente para completar características técnicas","type":"upload","required":true,"showWhen":{"key":"missing_feature","values":["Tomarla de otra fuente"]},"accept":".pdf,.xlsx,.xls,.csv,.zip,.doc,.docx,.jpg,.jpeg,.png"},{"type":"heading","title":"Precios y organización comercial","text":"Define qué publicar cuando existan precios incompletos o condiciones especiales."},{"key":"price_available","label":"11. Después de revisar la fuente, ¿todos los productos tienen un precio utilizable?","type":"radio","required":true,"options":["Sí","No","Solo algunos","Aplicar fórmula"]},{"key":"price_formula","label":"Escribe la fórmula exacta que debe aplicarse","type":"textarea","required":true,"showWhen":{"key":"price_available","values":["Aplicar fórmula"]},"placeholder":"Incluye porcentaje, valor fijo, redondeo, moneda y cualquier excepción."},{"key":"missing_price_action","label":"12. ¿Qué debe mostrarse cuando no exista precio?","type":"radio","required":true,"showWhen":{"key":"price_available","values":["No","Solo algunos"]},"options":["Mostrar consultar precio","No publicar","Dejar pendiente"]},{"key":"tax_included","label":"13. ¿Los precios incluyen IVA?","type":"radio","required":true,"options":["Sí","No","Depende del producto","No aplica","Otro"]},{"key":"tax_other_note","label":"Describe la anomalía o condición especial del IVA","type":"textarea","required":true,"showWhen":{"key":"tax_included","values":["Otro"]},"placeholder":"Explica cómo debe interpretarse o publicarse el IVA."},{"key":"category_indicated","label":"14. ¿Los archivos indican la categoría de cada producto?","type":"radio","required":true,"options":["Sí","No","Solo algunos"]},{"key":"category_name","label":"15. ¿Cuál es la categoría correspondiente?","type":"textarea","required":true,"placeholder":"Indica la categoría o la regla para asignarla a cada producto."},{"key":"has_subcategory","label":"16. ¿Tiene subcategoría?","type":"radio","required":true,"options":["Sí","No"]},{"key":"subcategory_name","label":"Indica la subcategoría correspondiente","type":"textarea","required":true,"showWhen":{"key":"has_subcategory","values":["Sí"]},"placeholder":"Indica la subcategoría o la regla para asignarla."},{"key":"specific_brand","label":"17. ¿El producto pertenece a una marca específica?","type":"radio","required":true,"options":["Sí","No"]},{"key":"brand_name","label":"Indica la marca correspondiente","type":"textarea","required":true,"showWhen":{"key":"specific_brand","values":["Sí"]},"placeholder":"Escribe la marca o explica cómo identificarla en la fuente."},{"key":"unit_indicated","label":"18. ¿La unidad de venta está indicada?","type":"radio","required":true,"options":["Sí","No"]},{"key":"unit_rule","label":"Indica la unidad de venta que debe utilizarse","type":"textarea","required":true,"showWhen":{"key":"unit_indicated","values":["No"]},"placeholder":"Ejemplo: unidad, caja, metro, rollo, paquete o kit."},{"key":"availability","label":"19. ¿Cómo debe manejarse la disponibilidad?","type":"radio","required":true,"options":["Mostrar inventario exacto","Mostrar disponible o agotado","Mostrar consultar disponibilidad","Publicar como bajo pedido","No mostrar disponibilidad"]},{"key":"additional_instructions","label":"20. Instrucciones adicionales para la carga","type":"textarea","required":true,"placeholder":"Incluye reglas de nombres, imágenes, variaciones, documentos, orden o cualquier excepción."},{"key":"priority_items","label":"21. Productos, páginas o marcas que deben publicarse primero.","type":"textarea","required":true,"placeholder":"Indica el orden de prioridad usando páginas, códigos, marcas, categorías o referencias."}]},"product_updates":{"title":"Actualización de productos existentes","subtitle":"Cambios sobre productos publicados con todas las fuentes necesarias.","questions":[{"type":"heading","title":"Fuentes obligatorias para los cambios","text":"Adjunta todas las fuentes necesarias para aplicar los cambios solicitados. Si una fuente no contiene un dato requerido, define al final qué debe hacerse con ese cambio."},{"key":"total_products","label":"1. ¿Cuántos productos deben actualizarse?","type":"number","required":true,"min":1,"placeholder":"Ej. 45"},{"key":"update_source","label":"2. ¿En qué fuente está la información actualizada?","type":"checkbox","required":true,"options":["Catálogo PDF","Lista de precios Excel","Archivo Excel o CSV","Página del fabricante","Ficha o documento técnico","Carpeta de imágenes","Otra fuente"]},{"key":"update_source_url","label":"Ingresa la página del fabricante","type":"text","inputType":"url","required":true,"showWhen":{"key":"update_source","values":["Página del fabricante"]},"placeholder":"https://..."},{"key":"update_source_other","label":"Describe la otra fuente","type":"textarea","required":true,"showWhen":{"key":"update_source","values":["Otra fuente"]},"placeholder":"Explica qué información contiene y cómo debe utilizarse."},{"key":"new_information","label":"3. ¿Qué información nueva contiene la fuente?","type":"checkbox","required":true,"options":["Nombre","Código o referencia","Precio","Descripción","Características técnicas","Imágenes","Categoría","Subcategoría","Marca","Unidad de venta","Disponibilidad","Documentos","SEO"]},{"key":"catalog_sections","label":"4. ¿Qué páginas o secciones del catálogo contienen las actualizaciones?","type":"textarea","required":true,"showWhen":{"key":"update_source","values":["Catálogo PDF"]},"placeholder":"Indica páginas, secciones, marcas, líneas o rangos del catálogo."},{"key":"product_identification","label":"5. ¿Cómo se identifican los productos?","type":"checkbox","required":true,"options":["Código o SKU","Nombre exacto","Enlace actual","Categoría","Marca","Página del catálogo","Archivo de relación"]},{"key":"update_files","label":"6. Adjunta la lista de productos y la información nueva","type":"upload","required":true,"accept":".pdf,.xlsx,.xls,.csv,.zip,.doc,.docx,.jpg,.jpeg,.png,.webp"},{"key":"fields_to_update","label":"7. ¿Qué información debe actualizarse?","type":"checkbox","required":true,"options":["Nombre","Código o referencia","Precio","Descripción","Características técnicas","Imágenes","Categoría","Subcategoría","Marca","Unidad de venta","Disponibilidad","Documentos","SEO","Estado del producto"]},{"key":"change_detail","label":"8. Explica qué está incorrecto y qué debe quedar publicado","type":"textarea","required":true,"placeholder":"Describe la información actual, la información correcta, las reglas generales y las excepciones."},{"type":"heading","title":"Información faltante para realizar un cambio","text":"Define una única instrucción para cualquier cambio que no pueda completarse con las fuentes adjuntas."},{"key":"missing_update_action","label":"Si falta información necesaria para un cambio solicitado, ¿qué debe hacerse?","type":"radio","required":true,"options":["Conservar la información actual de ese campo","Dejar únicamente ese cambio pendiente","No actualizar el producto","Utilizar una fuente complementaria adjunta","Marcar el producto para revisión"]},{"key":"complementary_source","label":"Adjunta la fuente complementaria","type":"upload","required":true,"showWhen":{"key":"missing_update_action","values":["Utilizar una fuente complementaria adjunta"]},"accept":".pdf,.xlsx,.xls,.csv,.zip,.doc,.docx,.jpg,.jpeg,.png,.webp"}]},"pricing":{"title":"Administración de precios","subtitle":"Actualizaciones, fórmulas, promociones y productos bajo consulta.","questions":[{"type":"heading","title":"Alcance y fuente","text":"Define exactamente qué productos se modificarán y de dónde salen los nuevos valores."},{"key":"price_scope","label":"1. ¿Qué precios se deben actualizar?","type":"radio","required":true,"options":["Todos los productos","Una categoría","Una marca","Productos específicos","Productos incluidos en una lista o archivo"]},{"key":"price_scope_detail","label":"Especifica cuáles precios o productos se deben actualizar","type":"textarea","required":true,"showWhen":{"key":"price_scope","values":["Una categoría","Una marca","Productos específicos","Productos incluidos en una lista o archivo"]},"placeholder":"Indica códigos, referencias, marcas, categorías, enlaces o criterios de selección."},{"key":"price_scope_file","label":"Adjunta el archivo que identifica los productos afectados","type":"upload","required":true,"showWhen":{"key":"price_scope","values":["Una categoría","Una marca","Productos específicos","Productos incluidos en una lista o archivo"]},"accept":".pdf,.xlsx,.xls,.csv,.zip,.doc,.docx"},{"key":"price_source","label":"2. ¿Cuál es la fuente de los nuevos precios?","type":"radio","required":true,"options":["Lista de precios Excel","Catálogo PDF","Archivo Excel o CSV","ERP o sistema contable","Página del proveedor o fabricante","Instrucción escrita","Otra fuente"]},{"key":"price_source_file","label":"Adjunta la fuente de los nuevos precios","type":"upload","required":true,"showWhen":{"key":"price_source","values":["Lista de precios Excel","Catálogo PDF","Archivo Excel o CSV","Instrucción escrita","Otra fuente"]},"accept":".pdf,.xlsx,.xls,.csv,.zip,.doc,.docx"},{"key":"price_source_url","label":"Ingresa la página de la fuente de precios","type":"text","inputType":"url","required":true,"showWhen":{"key":"price_source","values":["Página del proveedor o fabricante"]},"placeholder":"https://..."},{"key":"erp_instruction","label":"Indica el sistema, reporte o campo del que se deben tomar los precios","type":"textarea","required":true,"showWhen":{"key":"price_source","values":["ERP o sistema contable"]},"placeholder":"Ej. reporte de productos, columna PVP, lista comercial 1."},{"key":"exact_instruction","label":"3. Escribe la instrucción exacta que define el nuevo precio","type":"textarea","required":true,"placeholder":"Indica columna, lista, regla, prioridad de fuentes y cualquier excepción."},{"key":"price_tax","label":"4. ¿El precio incluye IVA?","type":"radio","required":true,"options":["Sí","No","Depende del producto","Otro"]},{"key":"price_tax_other","label":"Explica la condición especial del IVA","type":"textarea","required":true,"showWhen":{"key":"price_tax","values":["Otro"]},"placeholder":"Describe cómo debe interpretarse y publicarse el impuesto."},{"key":"apply_formula","label":"5. ¿Debe aplicarse una fórmula?","type":"radio","required":true,"options":["Sí","No"]},{"key":"formula_detail","label":"Escribe la fórmula exacta","type":"textarea","required":true,"showWhen":{"key":"apply_formula","values":["Sí"]},"placeholder":"Incluye margen, descuento, tasa, moneda, redondeo y excepciones."},{"key":"missing_price","label":"6. ¿Qué hacer con productos sin precio?","type":"radio","required":true,"options":["Mantener el precio actual","Mostrar precio bajo consulta","No publicar","Dejar pendiente"]},{"key":"temporary_promotion","label":"7. ¿Es una promoción temporal?","type":"radio","required":true,"options":["Sí","No"]},{"key":"promotion_start","label":"Fecha de inicio de la promoción","type":"text","inputType":"date","required":true,"showWhen":{"key":"temporary_promotion","values":["Sí"]}},{"key":"promotion_end","label":"Fecha de finalización de la promoción","type":"text","inputType":"date","required":true,"showWhen":{"key":"temporary_promotion","values":["Sí"]}},{"key":"excluded_prices","label":"8. Productos o precios que no deben modificarse (de la lista)","type":"textarea","required":true,"placeholder":"Indica códigos, referencias, rangos, marcas o reglas de exclusión. Si no hay excepciones, escribe Ninguno."},{"key":"affected_identification","label":"9. ¿Cómo se identifican los productos afectados?","type":"checkbox","required":true,"options":["Código o SKU","Nombre exacto","Código y nombre","Categoría","Marca","Enlace actual","Columna o identificador del archivo"]},{"key":"price_authorizer","label":"10. ¿Quién autoriza los cambios de precio?","type":"text","required":true,"placeholder":"Nombre, cargo o área responsable."},{"key":"consult_price_products","label":"11. ¿Existen productos que deban mostrar “precio bajo consulta”?","type":"radio","required":true,"options":["Sí","No"]},{"key":"consult_price_detail","label":"Indica cuáles productos deben mostrar precio bajo consulta","type":"textarea","required":true,"showWhen":{"key":"consult_price_products","values":["Sí"]},"placeholder":"Incluye códigos, nombres, marcas, categorías o criterios."}]},"categories":{"title":"Categorías y subcategorías","subtitle":"Definición de estructura, imágenes y orden de navegación.","questions":[{"type":"heading","title":"Estructura de categorías","text":"Entrega la fuente y describe cómo debe quedar organizado el catálogo."},{"key":"category_actions","label":"1. ¿Qué acciones se necesitan?","type":"checkbox","required":true,"options":["Crear categorías","Crear subcategorías","Renombrar categorías","Reorganizar la estructura","Eliminar categorías","Mover productos","Cambiar imágenes o iconos","Cambiar el orden"]},{"key":"structure_source","label":"2. ¿Cuál es la fuente para definir la nueva estructura?","type":"radio","required":true,"options":["Catálogo del cliente","Archivo Excel o CSV","Página actual","Página de referencia","Instrucciones escritas","Otra fuente"]},{"key":"structure_source_url","label":"Ingresa la página de referencia","type":"text","inputType":"url","required":true,"showWhen":{"key":"structure_source","values":["Página de referencia"]},"placeholder":"https://..."},{"key":"structure_source_other","label":"Describe la otra fuente","type":"textarea","required":true,"showWhen":{"key":"structure_source","values":["Otra fuente"]},"placeholder":"Explica qué contiene y cómo debe utilizarse."},{"key":"current_structure","label":"3. Describe la estructura actual","type":"textarea","required":true,"placeholder":"Escribe categorías, subcategorías y problemas actuales."},{"key":"target_structure","label":"4. Describe la estructura final esperada","type":"textarea","required":true,"placeholder":"Ejemplo: Iluminación > Bombillos LED > Bombillos dicroicos."},{"key":"structure_files","label":"5. Adjunta estructura, listado o referencia visual","type":"upload","required":true,"accept":".pdf,.xlsx,.xls,.csv,.zip,.doc,.docx,.jpg,.jpeg,.png,.webp"},{"key":"image_categories","label":"6. ¿Qué categorías requieren una imagen o icono?","type":"textarea","required":true,"placeholder":"Indica todas, algunas categorías específicas o ninguna."},{"key":"category_order","label":"7. ¿Cuál debe ser el orden de las categorías?","type":"textarea","required":true,"placeholder":"Escribe el orden exacto del menú, la página de inicio o cada nivel de categoría."}]},"banners":{"title":"Banners y elementos gráficos","subtitle":"Objetivo, ubicación y contenido de las piezas visuales.","questions":[{"type":"heading","title":"1. Objetivo y ubicación","text":""},{"key":"location","label":"¿Dónde se publicará?","type":"checkbox","required":true,"options":["Banner principal","Inicio","Categoría","Producto","Popup","Landing page","Formulario","Página de marca","Otro"]},{"key":"objective","label":"Objetivo comercial","type":"radio","required":true,"options":["Promocionar productos","Promocionar categoría","Presentar marca","Captar distribuidores","Informar","Generar contactos","Dirigir a campaña"]},{"key":"quantity","label":"Cantidad de piezas","type":"number","required":true,"min":1},{"key":"destination","label":"Enlace de destino","type":"text","inputType":"url","placeholder":"https://..."},{"type":"heading","title":"2. Contenido","text":""},{"key":"title","label":"Texto principal","type":"text","required":true},{"key":"subtitle","label":"Texto secundario","type":"textarea"},{"key":"cta","label":"Llamada a la acción","type":"text","placeholder":"Ej. Ver productos"},{"key":"products","label":"Productos, marcas o categorías que deben aparecer","type":"textarea","required":true},{"key":"legal","label":"Condiciones, vigencia o textos obligatorios","type":"textarea"}]},"monthly":{"title":"Preguntas mensuales recomendadas","subtitle":"Novedades periódicas del catálogo, campañas y mantenimiento.","questions":[{"type":"heading","title":"1. Productos y catálogo","text":""},{"key":"new_products","label":"Productos nuevos del mes","type":"textarea","placeholder":"Códigos, marcas, cantidades o archivos relacionados."},{"key":"updates","label":"Productos que requieren actualización","type":"textarea"},{"key":"statuses","label":"Productos agotados, descontinuados o reactivados","type":"textarea"},{"key":"catalog_files","label":"Adjunta archivos mensuales de productos","type":"upload","accept":".zip,.pdf,.xlsx,.xls,.csv,.doc,.docx,.jpg,.jpeg,.png"},{"type":"heading","title":"2. Precios y promociones","text":""},{"key":"prices","label":"Cambios de precio","type":"textarea"},{"key":"promotions","label":"Promociones activas o próximas","type":"textarea"},{"key":"price_file","label":"Adjunta la lista de precios actualizada","type":"upload","accept":".xlsx,.xls,.csv,.pdf"},{"type":"heading","title":"3. Contenido y campañas","text":""},{"key":"banners","label":"Banners o piezas nuevas","type":"textarea"},{"key":"campaigns","label":"Campañas o páginas especiales","type":"textarea"},{"type":"heading","title":"4. SEO, errores y prioridades","text":""},{"key":"seo","label":"Productos o categorías prioritarias en Google","type":"textarea"},{"key":"errors","label":"Errores o problemas detectados","type":"textarea"},{"key":"customer_requests","label":"Solicitudes frecuentes de los clientes","type":"textarea"},{"key":"priorities","label":"Prioridades del próximo mes","type":"textarea","required":true},{"key":"deadlines","label":"Fechas importantes del próximo periodo","type":"textarea","required":true},{"key":"approver","label":"Responsable de aprobar las tareas mensuales","type":"text","required":true}]}};
+
+    let currentStep = 1;
+    const totalSteps = 4;
+    const selectedNeeds = new Set();
+
+    const needsGrid = document.getElementById("needsGrid");
+    const dynamicSections = document.getElementById("dynamicSections");
+    const selectedList = document.getElementById("selectedList");
+    const progressBar = document.getElementById("progressBar");
+    const progressText = document.getElementById("progressText");
+    const progressPercent = document.getElementById("progressPercent");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const submitBtn = document.getElementById("submitBtn");
+    const saveDraftBtn = document.getElementById("saveDraftBtn");
+    const form = document.getElementById("ecommerceForm");
+    const summaryContent = document.getElementById("summaryContent");
+
+    function renderNeeds() {
+      needsGrid.innerHTML = needGroups.map(group => {
+        const groupNeeds = needs.filter(need => need.group === group.id);
+
+        return `
+          <section class="need-group">
+            <div class="need-group-head">
+              <span class="need-group-number">${group.icon}</span>
+              <div>
+                <strong>${group.title}</strong>
+                <p>${group.description}</p>
+              </div>
+            </div>
+
+            <div class="need-group-grid">
+              ${groupNeeds.map(need => `
+                <label class="need-card" data-need-card="${need.id}">
+                  <input type="checkbox" value="${need.id}" />
+                  <div class="need-icon">${need.icon}</div>
+                  <div class="need-copy">
+                    <strong>${need.title}</strong>
+                    <span>${need.description}</span>
+                  </div>
+                  <div class="checkmark">✓</div>
+                </label>
+              `).join("")}
+            </div>
+          </section>
+        `;
+      }).join("");
+
+      needsGrid.querySelectorAll(".need-card").forEach(card => {
+        card.addEventListener("click", () => {
+          const id = card.dataset.needCard;
+          const input = card.querySelector("input");
+
+          setTimeout(() => {
+            if (input.checked) {
+              selectedNeeds.add(id);
+              card.classList.add("selected");
+            } else {
+              selectedNeeds.delete(id);
+              card.classList.remove("selected");
+            }
+
+            renderSelectedList();
+            renderDynamicSections();
+          }, 0);
+        });
+      });
+    }
+
+    function renderSelectedList() {
+      if (!selectedNeeds.size) {
+        selectedList.innerHTML = `
+          <div class="selected-item">
+            <span class="selected-bullet"></span>
+            <span>Aún no has seleccionado ninguna necesidad.</span>
+          </div>
+        `;
+        return;
+      }
+
+      selectedList.innerHTML = [...selectedNeeds].map(id => {
+        const need = needs.find(item => item.id === id);
+        return `
+          <div class="selected-item">
+            <span class="selected-bullet"></span>
+            <span>${need.title}</span>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function sanitizeName(text) {
+      return text
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "_")
+        .replace(/^_+|_+$/g, "");
+    }
+
+    function renderQuestion(question, sectionId, index) {
+      if (question.type === "heading") {
+        return `
+          <div class="question-heading">
+            <strong>${question.title}</strong>
+            ${question.text ? `<span>${question.text}</span>` : ""}
+          </div>
+        `;
+      }
+
+      const name = `${sectionId}_${question.key || sanitizeName(question.label)}`;
+      const fullClass = question.full || ["textarea", "upload", "checkbox", "radio"].includes(question.type) ? " full" : "";
+      const conditionClass = question.showWhen ? " condition-field" : "";
+      const conditionAttrs = question.showWhen
+        ? `data-condition-source="${sectionId}_${question.showWhen.key}" data-condition-values="${question.showWhen.values.join("|")}"`
+        : "";
+      const requiredClass = question.required ? " required-label" : "";
+      const requiredAttr = question.required ? `data-required-question="true"` : "";
+      const labelAttr = `data-question-label="${question.label.replaceAll('"', '&quot;')}" data-question-name="${name}" data-section-id="${sectionId}"`;
+
+      if (question.type === "textarea") {
+        return `
+          <div class="field${fullClass}${conditionClass}" ${conditionAttrs} ${requiredAttr} ${labelAttr}>
+            <label class="${requiredClass}" for="${name}">${question.label}</label>
+            <textarea class="textarea" id="${name}" name="${name}" placeholder="${question.placeholder || ""}"></textarea>
+          </div>
+        `;
+      }
+
+      if (["text", "number"].includes(question.type)) {
+        return `
+          <div class="field${fullClass}${conditionClass}" ${conditionAttrs} ${requiredAttr} ${labelAttr}>
+            <label class="${requiredClass}" for="${name}">${question.label}</label>
+            <input class="input" id="${name}" name="${name}" type="${question.inputType || question.type}" ${question.min ? `min="${question.min}"` : ""} placeholder="${question.placeholder || ""}" />
+          </div>
+        `;
+      }
+
+      if (question.type === "select") {
+        return `
+          <div class="field${fullClass}${conditionClass}" ${conditionAttrs} ${requiredAttr} ${labelAttr}>
+            <label class="${requiredClass}" for="${name}">${question.label}</label>
+            <select class="select" id="${name}" name="${name}">
+              <option value="">Seleccionar</option>
+              ${question.options.map(option => `<option>${option}</option>`).join("")}
+            </select>
+          </div>
+        `;
+      }
+
+      if (question.type === "radio" || question.type === "checkbox") {
+        return `
+          <div class="field${fullClass}${conditionClass}" ${conditionAttrs} ${requiredAttr} ${labelAttr}>
+            <span class="group-label ${requiredClass}">${question.label}</span>
+            <div class="choice-row">
+              ${question.options.map(option => `
+                <label class="choice">
+                  <input
+                    type="${question.type}"
+                    name="${question.type === "radio" ? name : `${name}[]`}"
+                    data-logical-name="${name}"
+                    value="${option}"
+                  />
+                  ${option}
+                </label>
+              `).join("")}
+            </div>
+          </div>
+        `;
+      }
+
+      if (question.type === "upload") {
+        return `
+          <div class="field${fullClass}${conditionClass}" ${conditionAttrs} ${requiredAttr} ${labelAttr}>
+            <span class="group-label ${requiredClass}">${question.label}</span>
+            <label class="upload-box">
+              <input type="file" id="${name}" name="${name}" accept="${question.accept || "*"}" multiple data-upload="${name}" />
+              <div>
+                <div class="upload-icon">↑</div>
+                <strong>Arrastra o selecciona archivos</strong>
+                <span>Catálogos, listas, imágenes, documentos o archivos comprimidos.</span>
+              </div>
+            </label>
+            <div class="file-list" id="${name}_files"></div>
+          </div>
+        `;
+      }
+
+      return "";
+    }
+
+    function productCardTemplate(baseName, number) {
+      return `
+        <div class="repeat-card" data-product-card>
+          <div class="repeat-head">
+            <strong>Producto ${number}</strong>
+            <button type="button" class="icon-button" data-remove-product title="Eliminar producto">×</button>
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label>Nombre del producto</label>
+              <input class="input" name="${baseName}_nombre[]" type="text" placeholder="Nombre exacto" />
+            </div>
+            <div class="field">
+              <label>Código o referencia</label>
+              <input class="input" name="${baseName}_codigo[]" type="text" placeholder="SKU o referencia" />
+            </div>
+            <div class="field">
+              <label>Marca</label>
+              <input class="input" name="${baseName}_marca[]" type="text" placeholder="Marca del producto" />
+            </div>
+            <div class="field">
+              <label>Categoría</label>
+              <input class="input" name="${baseName}_categoria[]" type="text" placeholder="Categoría y subcategoría" />
+            </div>
+            <div class="field">
+              <label>Precio</label>
+              <input class="input" name="${baseName}_precio[]" type="text" placeholder="$ 0" />
+            </div>
+            <div class="field">
+              <label>Unidad de venta</label>
+              <input class="input" name="${baseName}_unidad[]" type="text" placeholder="Unidad, caja, metro, kit..." />
+            </div>
+            <div class="field full">
+              <label>Observaciones</label>
+              <textarea class="textarea" name="${baseName}_observaciones[]" placeholder="Variaciones, disponibilidad, garantía, medidas o información pendiente."></textarea>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function getLogicalValues(logicalName) {
+      const controls = dynamicSections.querySelectorAll(`[data-logical-name="${CSS.escape(logicalName)}"], [name="${CSS.escape(logicalName)}"], [name="${CSS.escape(logicalName)}[]"]`);
+      const values = [];
+      controls.forEach(control => {
+        if ((control.type === "radio" || control.type === "checkbox") && control.checked) values.push(control.value);
+        if (!["radio", "checkbox", "file"].includes(control.type) && control.value) values.push(control.value);
+        if (control.type === "file" && control.files?.length) values.push(...[...control.files].map(file => file.name));
+      });
+      return values;
+    }
+
+    function evaluateConditions() {
+      dynamicSections.querySelectorAll(".condition-field").forEach(container => {
+        const values = getLogicalValues(container.dataset.conditionSource);
+        const allowed = container.dataset.conditionValues.split("|");
+        const visible = values.some(value => allowed.includes(value));
+        container.classList.toggle("visible", visible);
+        container.querySelectorAll("input, textarea, select").forEach(control => {
+          control.disabled = !visible;
+        });
+      });
+    }
+
+    function bindDynamicEvents() {
+      dynamicSections.querySelectorAll(".accordion-head").forEach(button => {
+        button.addEventListener("click", () => {
+          button.closest(".accordion").classList.toggle("open");
+        });
+      });
+
+      dynamicSections.querySelectorAll("input, textarea, select").forEach(control => {
+        control.addEventListener("change", evaluateConditions);
+      });
+
+      dynamicSections.querySelectorAll("[data-upload]").forEach(input => {
+        input.addEventListener("change", () => {
+          const list = document.getElementById(`${input.dataset.upload}_files`);
+          list.innerHTML = [...input.files].map(file => `
+            <div class="file-chip">
+              <span>${file.name}</span>
+              <span>${formatBytes(file.size)}</span>
+            </div>
+          `).join("");
+          evaluateConditions();
+        });
+      });
+
+      dynamicSections.querySelectorAll("[data-add-product]").forEach(button => {
+        button.addEventListener("click", () => {
+          const baseName = button.dataset.addProduct;
+          const container = document.getElementById(`${baseName}_container`);
+          const nextNumber = container.querySelectorAll("[data-product-card]").length + 1;
+          container.insertAdjacentHTML("beforeend", productCardTemplate(baseName, nextNumber));
+          bindProductRemoveButtons(container);
+        });
+      });
+
+      dynamicSections.querySelectorAll("[id$='_container']").forEach(container => {
+        bindProductRemoveButtons(container);
+      });
+
+      evaluateConditions();
+    }
+
+    function bindProductRemoveButtons(container) {
+      container.querySelectorAll("[data-remove-product]").forEach(button => {
+        button.onclick = () => {
+          const cards = container.querySelectorAll("[data-product-card]");
+          if (cards.length === 1) {
+            showToast("No se puede eliminar", "Debe permanecer al menos un producto en la sección.");
+            return;
+          }
+
+          button.closest("[data-product-card]").remove();
+          container.querySelectorAll("[data-product-card]").forEach((card, index) => {
+            card.querySelector(".repeat-head strong").textContent = `Producto ${index + 1}`;
+          });
+        };
+      });
+    }
+
+    function formatBytes(bytes) {
+      if (!bytes) return "0 KB";
+      const units = ["B", "KB", "MB", "GB"];
+      const index = Math.floor(Math.log(bytes) / Math.log(1024));
+      return `${(bytes / Math.pow(1024, index)).toFixed(index === 0 ? 0 : 1)} ${units[index]}`;
+    }
+
+    function renderDynamicSections() {
+      if (!selectedNeeds.size) {
+        dynamicSections.innerHTML = `
+          <div class="dynamic-empty">
+            <strong>No hay áreas seleccionadas</strong>
+            Regresa al paso anterior y selecciona al menos una necesidad.
+          </div>
+        `;
+        return;
+      }
+
+      dynamicSections.innerHTML = `
+        <div class="dynamic-group-list">
+          ${needGroups.map(group => {
+            const groupIds = [...selectedNeeds].filter(id => {
+              const need = needs.find(item => item.id === id);
+              return need && need.group === group.id;
+            });
+
+            if (!groupIds.length) return "";
+
+            return `
+              <section class="dynamic-group">
+                <div class="dynamic-group-head">
+                  <span class="need-group-number">${group.icon}</span>
+                  <div>
+                    <strong>${group.title}</strong>
+                    <p>${group.description}</p>
+                  </div>
+                </div>
+
+                <div class="accordion-list">
+                  ${groupIds.map((id, sectionIndex) => {
+                    const definition = sectionDefinitions[id];
+                    return `
+                      <section class="accordion ${sectionIndex === 0 ? "open" : ""}">
+                        <button class="accordion-head" type="button">
+                          <span class="accordion-title">
+                            <span class="mini-icon">${needs.find(item => item.id === id).icon}</span>
+                            <span>
+                              <strong>${definition.title}</strong>
+                              <small>${definition.subtitle}</small>
+                            </span>
+                          </span>
+                          <span class="accordion-arrow">⌄</span>
+                        </button>
+                        <div class="accordion-body">
+                          <div class="questions-grid">
+                            ${definition.questions.map((question, index) => renderQuestion(question, id, index)).join("")}
+                          </div>
+                        </div>
+                      </section>
+                    `;
+                  }).join("")}
+                </div>
+              </section>
+            `;
+          }).join("")}
+        </div>
+      `;
+
+      bindDynamicEvents();
+    }
+
+    function updateStepUI() {
+      document.querySelectorAll(".form-step").forEach(step => {
+        step.classList.toggle("active", Number(step.dataset.step) === currentStep);
+      });
+
+      document.querySelectorAll("[data-step-indicator]").forEach(indicator => {
+        const stepNumber = Number(indicator.dataset.stepIndicator);
+        indicator.classList.toggle("active", stepNumber === currentStep);
+        indicator.classList.toggle("complete", stepNumber < currentStep);
+      });
+
+      const percentage = Math.round((currentStep / totalSteps) * 100);
+      progressBar.style.width = `${percentage}%`;
+      progressText.textContent = `Paso ${currentStep} de ${totalSteps}`;
+      progressPercent.textContent = `${percentage}%`;
+
+      prevBtn.disabled = currentStep === 1;
+      nextBtn.hidden = currentStep === totalSteps;
+      submitBtn.hidden = currentStep !== totalSteps;
+
+      if (currentStep === totalSteps) {
+        renderSummary();
+      }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function isRequiredContainerComplete(container) {
+      if (container.classList.contains("condition-field") && !container.classList.contains("visible")) return true;
+      const controls = [...container.querySelectorAll("input, textarea, select")].filter(control => !control.disabled);
+      if (!controls.length) return true;
+      const first = controls[0];
+      if (first.type === "radio" || first.type === "checkbox") return controls.some(control => control.checked);
+      if (first.type === "file") return first.files && first.files.length > 0;
+      return String(first.value || "").trim().length > 0;
+    }
+
+    function validateCurrentStep() {
+      if (currentStep === 1) {
+        const requiredFields = document.querySelectorAll('[data-step="1"] [required]');
+        for (const field of requiredFields) {
+          if (!field.value.trim()) {
+            field.focus();
+            field.reportValidity();
+            return false;
+          }
+        }
+      }
+
+      if (currentStep === 2 && !selectedNeeds.size) {
+        showToast("Selecciona una necesidad", "Debes elegir al menos una de las áreas disponibles.");
+        return false;
+      }
+
+      if (currentStep === 3) {
+        const requiredContainers = [...dynamicSections.querySelectorAll('[data-required-question="true"]')];
+        const incomplete = requiredContainers.find(container => !isRequiredContainerComplete(container));
+        if (incomplete) {
+          incomplete.closest(".accordion")?.classList.add("open");
+          incomplete.scrollIntoView({ behavior: "smooth", block: "center" });
+          showToast("Falta información esencial", `Completa: ${incomplete.dataset.questionLabel}`);
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    function getContainerAnswer(container) {
+      const controls = [...container.querySelectorAll("input, textarea, select")].filter(control => !control.disabled);
+      if (!controls.length) return "";
+      const first = controls[0];
+      if (first.type === "file") return first.files?.length ? [...first.files].map(file => file.name).join(", ") : "";
+      if (first.type === "radio" || first.type === "checkbox") return controls.filter(control => control.checked).map(control => control.value).join(", ");
+      return first.value || "";
+    }
+
+    function renderSummary() {
+      const companyName = document.getElementById("companyName").value || "Sin información";
+      const website = document.getElementById("website").value || "No indicada";
+      const contactName = document.getElementById("contactName").value || "Sin información";
+      const contactRole = document.getElementById("contactRole").value || "No indicado";
+      const email = document.getElementById("email").value || "Sin información";
+      const phone = document.getElementById("phone").value || "Sin información";
+      const priority = document.getElementById("generalPriority").value || "No definida";
+      const date = document.getElementById("requestDate").value || "No definida";
+      const context = document.getElementById("generalContext").value || "No se agregó una descripción general.";
+      const selectedTitles = [...selectedNeeds].map(id => needs.find(item => item.id === id).title);
+
+      const moduleAnswers = [...selectedNeeds].map(id => {
+        const definition = sectionDefinitions[id];
+        const containers = [...dynamicSections.querySelectorAll(`[data-section-id="${id}"]`)]
+          .filter(container => !container.classList.contains("condition-field") || container.classList.contains("visible"));
+        const answers = containers.map(container => ({
+          label: container.dataset.questionLabel,
+          value: getContainerAnswer(container)
+        })).filter(answer => answer.value);
+
+        return `
+          <div class="module-summary">
+            <h5>${definition.title}</h5>
+            ${answers.map(answer => `
+              <div class="answer-row">
+                <span>${escapeHtml(answer.label)}</span>
+                <strong>${escapeHtml(answer.value)}</strong>
+              </div>
+            `).join("")}
+          </div>
+        `;
+      }).join("");
+
+      summaryContent.innerHTML = `
+        <div class="summary-block">
+          <h4>Empresa y contacto</h4>
+          <ul class="summary-list">
+            <li><span>Empresa</span><strong>${escapeHtml(companyName)}</strong></li>
+            <li><span>Página web</span><strong>${escapeHtml(website)}</strong></li>
+            <li><span>Responsable</span><strong>${escapeHtml(contactName)} · ${escapeHtml(contactRole)}</strong></li>
+            <li><span>Correo</span><strong>${escapeHtml(email)}</strong></li>
+            <li><span>Teléfono</span><strong>${escapeHtml(phone)}</strong></li>
+            <li><span>Prioridad</span><strong>${escapeHtml(priority)}</strong></li>
+            <li><span>Fecha esperada</span><strong>${escapeHtml(date)}</strong></li>
+          </ul>
+        </div>
+
+        <div class="summary-block">
+          <h4>Áreas seleccionadas</h4>
+          <div class="summary-tags">
+            ${selectedTitles.map(title => `<span class="summary-tag">${title}</span>`).join("")}
+          </div>
+        </div>
+
+        <div class="summary-block">
+          <h4>Objetivo general</h4>
+          <p style="margin:0; color:var(--text-soft); line-height:1.6;">${escapeHtml(context)}</p>
+        </div>
+
+        <div class="summary-block">
+          <h4>Respuestas de la solicitud</h4>
+          ${moduleAnswers}
+        </div>
+
+        <div class="summary-block">
+          <h4>Estado del módulo</h4>
+          <p style="margin:0; color:var(--text-soft); line-height:1.6;">
+            El levantamiento contiene preguntas obligatorias, preguntas condicionales y un resumen completo.
+            La siguiente etapa puede conectar el envío con correo, WhatsApp, Google Sheets, CRM o una base de datos.
+          </p>
+        </div>
+      `;
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function showToast(title, message) {
+      const toast = document.getElementById("toast");
+      document.getElementById("toastTitle").textContent = title;
+      document.getElementById("toastMessage").textContent = message;
+      toast.classList.add("show");
+
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3200);
+    }
+
+    nextBtn.addEventListener("click", () => {
+      if (!validateCurrentStep()) return;
+      currentStep = Math.min(totalSteps, currentStep + 1);
+      updateStepUI();
+    });
+
+    prevBtn.addEventListener("click", () => {
+      currentStep = Math.max(1, currentStep - 1);
+      updateStepUI();
+    });
+
+    saveDraftBtn.addEventListener("click", () => {
+      const dynamic = {};
+      dynamicSections.querySelectorAll("input, textarea, select").forEach(control => {
+        if (control.type === "file") return;
+        const logical = control.dataset.logicalName || control.name;
+        if (control.type === "radio") {
+          if (control.checked) dynamic[logical] = control.value;
+        } else if (control.type === "checkbox") {
+          if (!Array.isArray(dynamic[logical])) dynamic[logical] = [];
+          if (control.checked) dynamic[logical].push(control.value);
+        } else {
+          dynamic[logical] = control.value;
+        }
+      });
+
+      const draft = {
+        companyName: document.getElementById("companyName").value,
+        website: document.getElementById("website").value,
+        contactName: document.getElementById("contactName").value,
+        contactRole: document.getElementById("contactRole").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value,
+        requestDate: document.getElementById("requestDate").value,
+        generalPriority: document.getElementById("generalPriority").value,
+        generalContext: document.getElementById("generalContext").value,
+        selectedNeeds: [...selectedNeeds],
+        dynamic
+      };
+
+      localStorage.setItem("ecommerce_visual_draft_v3", JSON.stringify(draft));
+      showToast("Borrador guardado", "Las respuestas quedaron guardadas temporalmente en este navegador.");
+    });
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      showToast("Solicitud preparada", "La interfaz funciona correctamente. El envío real se conectará en una siguiente etapa.");
+    });
+
+    function loadDraft() {
+      const saved = localStorage.getItem("ecommerce_visual_draft_v3");
+      if (!saved) return;
+
+      try {
+        const draft = JSON.parse(saved);
+        [
+          "companyName",
+          "website",
+          "contactName",
+          "contactRole",
+          "email",
+          "phone",
+          "requestDate",
+          "generalPriority",
+          "generalContext"
+        ].forEach(id => {
+          if (draft[id] !== undefined && document.getElementById(id)) {
+            document.getElementById(id).value = draft[id];
+          }
+        });
+
+        (draft.selectedNeeds || []).filter(id => needs.some(need => need.id === id)).forEach(id => {
+          selectedNeeds.add(id);
+          const card = document.querySelector(`[data-need-card="${id}"]`);
+          if (card) {
+            card.classList.add("selected");
+            card.querySelector("input").checked = true;
+          }
+        });
+
+        renderSelectedList();
+        renderDynamicSections();
+
+        const dynamic = draft.dynamic || {};
+        Object.entries(dynamic).forEach(([logical, value]) => {
+          const controls = dynamicSections.querySelectorAll(`[data-logical-name="${CSS.escape(logical)}"], [name="${CSS.escape(logical)}"], [name="${CSS.escape(logical)}[]"]`);
+          controls.forEach(control => {
+            if (control.type === "radio") control.checked = control.value === value;
+            else if (control.type === "checkbox") control.checked = Array.isArray(value) && value.includes(control.value);
+            else control.value = value;
+          });
+        });
+        evaluateConditions();
+      } catch (error) {
+        console.warn("No fue posible cargar el borrador.", error);
+      }
+    }
+
+    renderNeeds();
+    renderSelectedList();
+    renderDynamicSections();
+    loadDraft();
+    updateStepUI();
+  </script>
+</body>
+</html>

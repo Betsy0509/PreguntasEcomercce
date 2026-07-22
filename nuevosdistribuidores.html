@@ -1,0 +1,1183 @@
+<style type="text/css">/* =========================================
+  FORMULARIO DISTRIBUIDORES IMPORTLED
+  Estilos completamente aislados
+  ========================================= */
+  .ild-distributor {
+    --ild-blue: #087fbd;
+    --ild-blue-dark: #075f8c;
+    --ild-cyan: #20bfd2;
+    --ild-cyan-soft: #e9fbfd;
+    --ild-white: #ffffff;
+    --ild-gray-50: #f7f9fa;
+    --ild-gray-100: #edf2f4;
+    --ild-gray-200: #dce5e9;
+    --ild-gray-400: #8b9aa3;
+    --ild-gray-600: #52616a;
+    --ild-gray-800: #273740;
+    --ild-gray-900: #14252e;
+    --ild-danger: #d94343;
+    --ild-success: #15875d;
+    width: 100%;
+    max-width: 920px;
+    margin: 35px auto 65px;
+    padding: 0 18px;
+    color: var(--ild-gray-800);
+    font-family: inherit;
+    box-sizing: border-box;
+  }
+  .ild-distributor *,
+  .ild-distributor *::before,
+  .ild-distributor *::after {
+    box-sizing: border-box;
+  }
+  .ild-distributor button,
+  .ild-distributor input,
+  .ild-distributor select,
+  .ild-distributor textarea {
+    font: inherit;
+  }
+  /* ENCABEZADO */
+  .ild-intro {
+    max-width: 720px;
+    margin: 0 auto 25px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 0.7s ease,
+      transform 0.7s ease;
+  }
+  .ild-distributor.ild-visible .ild-intro {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .ild-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 13px;
+    padding: 7px 13px;
+    color: var(--ild-blue-dark);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    border: 1px solid rgba(8, 127, 189, 0.18);
+    border-radius: 999px;
+    background: var(--ild-cyan-soft);
+  }
+  .ild-badge::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--ild-cyan);
+    box-shadow: 0 0 0 5px rgba(32, 191, 210, 0.12);
+    animation: ildPulse 2.2s ease-in-out infinite;
+  }
+  .ild-intro h2 {
+    margin: 0 0 11px;
+    color: var(--ild-gray-900);
+    font-size: clamp(27px, 4vw, 38px);
+    line-height: 1.15;
+    letter-spacing: -1.2px;
+  }
+  .ild-intro h2 span {
+    color: var(--ild-blue);
+  }
+  .ild-intro p {
+    max-width: 650px;
+    margin: 0 auto;
+    color: var(--ild-gray-600);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  /* BENEFICIOS COMPACTOS */
+  .ild-benefits {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    max-width: 760px;
+    margin: 0 auto 18px;
+  }
+  .ild-benefit {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 66px;
+    padding: 13px;
+    color: var(--ild-white);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 14px;
+    background:
+      linear-gradient(
+        135deg,
+        var(--ild-blue-dark),
+        var(--ild-blue),
+        var(--ild-cyan)
+      );
+    box-shadow: 0 10px 24px rgba(8, 99, 145, 0.13);
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s ease,
+      box-shadow 0.3s ease;
+  }
+  .ild-distributor.ild-visible .ild-benefit {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .ild-distributor.ild-visible .ild-benefit:nth-child(1) {
+    transition-delay: 0.1s;
+  }
+  .ild-distributor.ild-visible .ild-benefit:nth-child(2) {
+    transition-delay: 0.18s;
+  }
+  .ild-distributor.ild-visible .ild-benefit:nth-child(3) {
+    transition-delay: 0.26s;
+  }
+  .ild-benefit:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(8, 99, 145, 0.2);
+  }
+  .ild-benefit-icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 33px;
+    width: 33px;
+    height: 33px;
+    color: var(--ild-blue-dark);
+    border-radius: 10px;
+    background: var(--ild-white);
+  }
+  .ild-benefit-icon svg {
+    width: 17px;
+    height: 17px;
+  }
+  .ild-benefit span {
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+  /* TARJETA PRINCIPAL */
+  .ild-form-card {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 28px;
+    border: 1px solid var(--ild-gray-200);
+    border-radius: 22px;
+    background: var(--ild-white);
+    box-shadow: 0 18px 45px rgba(30, 66, 85, 0.11);
+    opacity: 0;
+    transform: translateY(25px);
+    transition:
+      opacity 0.75s ease 0.2s,
+      transform 0.75s ease 0.2s;
+  }
+  .ild-distributor.ild-visible .ild-form-card {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .ild-form-card::before {
+    content: "";
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 210px;
+    height: 210px;
+    border: 30px solid rgba(32, 191, 210, 0.06);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .ild-form-heading {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 22px;
+    text-align: center;
+  }
+  .ild-form-heading small {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--ild-blue);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .ild-form-heading h3 {
+    margin: 0 0 7px;
+    color: var(--ild-gray-900);
+    font-size: 22px;
+    line-height: 1.25;
+  }
+  .ild-form-heading p {
+    margin: 0;
+    color: var(--ild-gray-600);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  /* PROGRESO */
+  .ild-progress-wrapper {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 25px;
+  }
+  .ild-step-indicators {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 9px;
+  }
+  .ild-step-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--ild-gray-400);
+    font-size: 10px;
+    font-weight: 700;
+    transition: color 0.3s ease;
+  }
+  .ild-step-indicator span {
+    display: grid;
+    place-items: center;
+    width: 23px;
+    height: 23px;
+    border: 1px solid var(--ild-gray-200);
+    border-radius: 50%;
+    background: var(--ild-white);
+    transition:
+      color 0.3s ease,
+      border-color 0.3s ease,
+      background 0.3s ease;
+  }
+  .ild-step-indicator.ild-active,
+  .ild-step-indicator.ild-completed {
+    color: var(--ild-blue-dark);
+  }
+  .ild-step-indicator.ild-active span,
+  .ild-step-indicator.ild-completed span {
+    color: var(--ild-white);
+    border-color: var(--ild-blue);
+    background: var(--ild-blue);
+  }
+  .ild-progress-track {
+    overflow: hidden;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--ild-gray-100);
+  }
+  .ild-progress-bar {
+    width: 33.333%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+      90deg,
+      var(--ild-blue),
+      var(--ild-cyan)
+    );
+    transition: width 0.45s ease;
+  }
+  /* PASOS */
+  .ild-step {
+    display: none;
+    position: relative;
+    z-index: 2;
+  }
+  .ild-step.ild-active {
+    display: block;
+    animation: ildStepEnter 0.4s ease both;
+  }
+  .ild-section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--ild-gray-100);
+  }
+  .ild-section-icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
+    color: var(--ild-white);
+    border-radius: 11px;
+    background: linear-gradient(
+      135deg,
+      var(--ild-blue),
+      var(--ild-cyan)
+    );
+    box-shadow: 0 7px 15px rgba(8, 127, 189, 0.17);
+  }
+  .ild-section-icon svg {
+    width: 17px;
+    height: 17px;
+  }
+  .ild-section-title h4 {
+    margin: 0;
+    color: var(--ild-gray-900);
+    font-size: 16px;
+  }
+  .ild-section-title p {
+    margin: 2px 0 0;
+    color: var(--ild-gray-400);
+    font-size: 10px;
+  }
+  /* FORMULARIO EN UNA SOLA COLUMNA */
+  .ild-fields {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 13px;
+  }
+  .ild-field-group label {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--ild-gray-800);
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .ild-required {
+    color: var(--ild-danger);
+  }
+  .ild-field-group input,
+  .ild-field-group select,
+  .ild-field-group textarea {
+    width: 100%;
+    color: var(--ild-gray-900);
+    border: 1px solid var(--ild-gray-200);
+    border-radius: 11px;
+    outline: none;
+    background: var(--ild-white);
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.25s ease,
+      transform 0.25s ease;
+  }
+  .ild-field-group input,
+  .ild-field-group select {
+    height: 44px;
+    padding: 0 13px;
+    font-size: 12px;
+  }
+  .ild-field-group textarea {
+    min-height: 88px;
+    padding: 12px 13px;
+    font-size: 12px;
+    line-height: 1.55;
+    resize: vertical;
+  }
+  .ild-field-group input::placeholder,
+  .ild-field-group textarea::placeholder {
+    color: #a3afb5;
+  }
+  .ild-field-group input:hover,
+  .ild-field-group select:hover,
+  .ild-field-group textarea:hover {
+    border-color: #b8c7ce;
+  }
+  .ild-field-group input:focus,
+  .ild-field-group select:focus,
+  .ild-field-group textarea:focus {
+    border-color: var(--ild-cyan);
+    box-shadow: 0 0 0 3px rgba(32, 191, 210, 0.11);
+    transform: translateY(-1px);
+  }
+  .ild-helper {
+    display: block;
+    margin-top: 5px;
+    color: var(--ild-gray-400);
+    font-size: 9px;
+    line-height: 1.45;
+  }
+  /* PRODUCTOS */
+  .ild-products {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .ild-product {
+    position: relative;
+  }
+  .ild-product input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+  .ild-product label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 43px;
+    margin: 0;
+    padding: 9px 11px;
+    color: var(--ild-gray-600);
+    font-size: 10px;
+    font-weight: 650;
+    border: 1px solid var(--ild-gray-200);
+    border-radius: 11px;
+    background: var(--ild-white);
+    cursor: pointer;
+    transition:
+      color 0.25s ease,
+      border-color 0.25s ease,
+      background 0.25s ease,
+      transform 0.25s ease;
+  }
+  .ild-product label:hover {
+    transform: translateY(-2px);
+    border-color: rgba(8, 127, 189, 0.35);
+  }
+  .ild-check {
+    display: grid;
+    place-items: center;
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    color: transparent;
+    border: 2px solid var(--ild-gray-200);
+    border-radius: 5px;
+    transition:
+      color 0.25s ease,
+      border-color 0.25s ease,
+      background 0.25s ease;
+  }
+  .ild-check svg {
+    width: 11px;
+    height: 11px;
+  }
+  .ild-product input:checked + label {
+    color: var(--ild-blue-dark);
+    border-color: rgba(8, 127, 189, 0.4);
+    background: var(--ild-cyan-soft);
+  }
+  .ild-product input:checked + label .ild-check {
+    color: var(--ild-white);
+    border-color: var(--ild-blue);
+    background: var(--ild-blue);
+  }
+  /* PRIVACIDAD */
+  .ild-privacy {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 12px;
+    border: 1px solid var(--ild-gray-200);
+    border-radius: 11px;
+    background: var(--ild-gray-50);
+  }
+  .ild-privacy input {
+    flex: 0 0 auto;
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+    accent-color: var(--ild-blue);
+    cursor: pointer;
+  }
+  .ild-privacy label {
+    margin: 0;
+    color: var(--ild-gray-600);
+    font-size: 9px;
+    line-height: 1.55;
+    cursor: pointer;
+  }
+  /* BOTONES */
+  .ild-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 21px;
+  }
+  .ild-button {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    min-height: 43px;
+    padding: 10px 18px;
+    font-size: 11px;
+    font-weight: 800;
+    border: none;
+    border-radius: 11px;
+    cursor: pointer;
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease,
+      background 0.25s ease;
+  }
+  .ild-button:hover {
+    transform: translateY(-2px);
+  }
+  .ild-button-secondary {
+    color: var(--ild-gray-600);
+    border: 1px solid var(--ild-gray-200);
+    background: var(--ild-gray-50);
+  }
+  .ild-button-secondary:hover {
+    color: var(--ild-blue-dark);
+    border-color: rgba(8, 127, 189, 0.3);
+    background: var(--ild-cyan-soft);
+  }
+  .ild-button-primary {
+    overflow: hidden;
+    margin-left: auto;
+    color: var(--ild-white);
+    background: linear-gradient(
+      135deg,
+      var(--ild-blue-dark),
+      var(--ild-blue),
+      var(--ild-cyan)
+    );
+    box-shadow: 0 11px 24px rgba(8, 127, 189, 0.22);
+  }
+  .ild-button-primary::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.25),
+      transparent
+    );
+    transform: skewX(-20deg);
+    animation: ildButtonShine 3.4s ease-in-out infinite;
+  }
+  .ild-button-primary:hover {
+    box-shadow: 0 15px 30px rgba(8, 127, 189, 0.3);
+  }
+  .ild-button:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .ild-button svg {
+    position: relative;
+    z-index: 2;
+    width: 16px;
+    height: 16px;
+  }
+  .ild-button span {
+    position: relative;
+    z-index: 2;
+  }
+  .ild-message {
+    display: none;
+    margin-top: 13px;
+    padding: 10px 12px;
+    font-size: 10px;
+    font-weight: 650;
+    line-height: 1.5;
+    border-radius: 10px;
+    animation: ildMessage 0.35s ease both;
+  }
+  .ild-message.ild-error {
+    display: block;
+    color: #9b3030;
+    border: 1px solid rgba(217, 67, 67, 0.22);
+    background: #fff1f1;
+  }
+  .ild-message.ild-success {
+    display: block;
+    color: #126645;
+    border: 1px solid rgba(21, 135, 93, 0.22);
+    background: #effff8;
+  }
+  .ild-security {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    margin-top: 13px;
+    color: var(--ild-gray-400);
+    font-size: 9px;
+    text-align: center;
+  }
+  .ild-security svg {
+    width: 12px;
+    height: 12px;
+  }
+  /* ANIMACIONES */
+  @keyframes ildPulse {
+    0%,
+    100% {
+      box-shadow: 0 0 0 4px rgba(32, 191, 210, 0.12);
+    }
+    50% {
+      box-shadow: 0 0 0 8px rgba(32, 191, 210, 0.03);
+    }
+  }
+  @keyframes ildStepEnter {
+    from {
+      opacity: 0;
+      transform: translateX(15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @keyframes ildButtonShine {
+    0%,
+    55% {
+      left: -100%;
+    }
+    100% {
+      left: 150%;
+    }
+  }
+  @keyframes ildMessage {
+    from {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  /* RESPONSIVE */
+  @media (max-width: 650px) {
+    .ild-distributor {
+      margin-top: 25px;
+      margin-bottom: 45px;
+      padding: 0 12px;
+    }
+    .ild-benefits {
+      grid-template-columns: 1fr;
+    }
+    .ild-benefit {
+      min-height: 55px;
+    }
+    .ild-form-card {
+      padding: 21px 15px;
+      border-radius: 17px;
+    }
+    .ild-products {
+      grid-template-columns: 1fr;
+    }
+    .ild-step-indicator {
+      font-size: 0;
+    }
+    .ild-actions {
+      flex-direction: column-reverse;
+    }
+    .ild-button {
+      width: 100%;
+    }
+    .ild-intro h2 {
+      font-size: 28px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ild-distributor *,
+    .ild-distributor *::before,
+    .ild-distributor *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+<section class="ild-distributor" id="ildDistributor">
+  <header class="ild-intro">
+    <div class="ild-badge">Oportunidad comercial
+    </div>
+    <h2>Convi&eacute;rtete en distribuidor <span>IMPORTLED</span>
+    </h2>
+    <p>Completa la informaci&oacute;n de tu empresa. Nuestro equipo comercial evaluar&aacute; tu solicitud y se comunicar&aacute; contigo para presentarte las condiciones del programa de distribuidores.
+    </p>
+  </header>
+  <div class="ild-benefits">
+    <article class="ild-benefit">
+      <div class="ild-benefit-icon">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"> 
+          <path d="M3 3v18h18"> 
+          </path> 
+          <path d="m7 16 4-5 4 3 5-7"> 
+          </path> 
+        </svg>
+      </div>
+      <span>Crecimiento y nuevas oportunidades comerciales</span>
+    </article>
+    <article class="ild-benefit">
+      <div class="ild-benefit-icon">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"> 
+          <path d="M12 2v20"> 
+          </path> 
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"> 
+          </path> 
+        </svg>
+      </div>
+      <span>Condiciones comerciales seg&uacute;n tu perfil</span>
+    </article>
+    <article class="ild-benefit">
+      <div class="ild-benefit-icon">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"> 
+          <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"> 
+          </path> 
+        </svg>
+      </div>
+      <span>Asesor&iacute;a y acompa&ntilde;amiento comercial</span>
+    </article>
+  </div>
+  <div class="ild-form-card">
+    <div class="ild-form-heading"><small>Solicitud comercial</small>
+      <h3>Formulario para nuevos distribuidores
+      </h3>
+      <p>Completa los tres pasos. Los campos marcados con asterisco son obligatorios.
+      </p>
+    </div>
+    <div class="ild-progress-wrapper">
+      <div class="ild-step-indicators">
+        <div class="ild-step-indicator ild-active" data-indicator="0"><span>1</span> Empresa
+        </div>
+        <div class="ild-step-indicator" data-indicator="1"><span>2</span> Contacto
+        </div>
+        <div class="ild-step-indicator" data-indicator="2"><span>3</span> Perfil comercial
+        </div>
+      </div>
+      <div class="ild-progress-track">
+        <div class="ild-progress-bar" id="ildProgressBar">&nbsp;
+        </div>
+      </div>
+    </div>
+    <form id="ildDistributorForm" novalidate=""><!-- PASO 1 -->
+      <div class="ild-step ild-active" data-step="0">
+        <div class="ild-section-title">
+          <div class="ild-section-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"> 
+              <path d="M3 21h18"> 
+              </path> 
+              <path d="M5 21V7l7-4 7 4v14"> 
+              </path> 
+              <path d="M9 21v-6h6v6"> 
+              </path> 
+            </svg>
+          </div>
+          <div>
+            <h4>Informaci&oacute;n de la empresa
+            </h4>
+            <p>Datos generales del negocio.
+            </p>
+          </div>
+        </div>
+        <div class="ild-fields">
+          <div class="ild-field-group"><label for="ildCompany">Nombre de la empresa <span class="ild-required">*</span> </label> 
+            <input id="ildCompany" maxlength="100" placeholder="Ej. Comercializadora Eléctrica SAS" required="" type="text" />
+          </div>
+          <div class="ild-field-group"><label for="ildNit">NIT <span class="ild-required">*</span> </label> 
+            <input id="ildNit" maxlength="30" placeholder="Ej. 900123456-7" required="" type="text" />
+          </div>
+          <div class="ild-field-group"><label for="ildBusinessType">Tipo de negocio <span class="ild-required">*</span> </label> 
+            <select id="ildBusinessType" required=""><option value="">Selecciona una opci&oacute;n</option><option value="Distribuidor mayorista">Distribuidor mayorista</option><option value="Almacén de material eléctrico">Almac&eacute;n de material el&eacute;ctrico</option><option value="Ferretería">Ferreter&iacute;a</option><option value="Empresa de ingeniería">Empresa de ingenier&iacute;a</option><option value="Empresa instaladora">Empresa instaladora</option><option value="Constructora">Constructora</option><option value="Comercio electrónico">Comercio electr&oacute;nico</option><option value="Otro">Otro</option> 
+            </select>
+          </div>
+          <div class="ild-field-group"><label for="ildYears">Tiempo en el mercado <span class="ild-required">*</span> </label> 
+            <select id="ildYears" required=""><option value="">Selecciona una opci&oacute;n</option><option value="Menos de 1 año">Menos de 1 a&ntilde;o</option><option value="Entre 1 y 3 años">Entre 1 y 3 a&ntilde;os</option><option value="Entre 4 y 7 años">Entre 4 y 7 a&ntilde;os</option><option value="Entre 8 y 12 años">Entre 8 y 12 a&ntilde;os</option><option value="Más de 12 años">M&aacute;s de 12 a&ntilde;os</option> 
+            </select>
+          </div>
+          <div class="ild-field-group"><label for="ildDepartment">Departamento <span class="ild-required">*</span> </label> 
+            <input id="ildDepartment" maxlength="60" placeholder="Ej. Cundinamarca" required="" type="text" />
+          </div>
+          <div class="ild-field-group"><label for="ildCity">Ciudad o municipio <span class="ild-required">*</span> </label> 
+            <input id="ildCity" maxlength="60" placeholder="Ej. Mosquera" required="" type="text" />
+          </div>
+          <div class="ild-field-group"><label for="ildWebsite">P&aacute;gina web o redes sociales </label> 
+            <input id="ildWebsite" maxlength="180" placeholder="Página web, Instagram o Facebook" type="text" />
+          </div>
+        </div>
+        <div class="ild-actions">
+          <button class="ild-button ild-button-primary" data-next="" type="button"><span>Continuar</span> 
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"> 
+              <path d="m9 18 6-6-6-6"> 
+              </path> 
+            </svg>
+          </button>
+        </div>
+      </div>
+      <!-- PASO 2 -->
+      <div class="ild-step" data-step="1">
+        <div class="ild-section-title">
+          <div class="ild-section-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"> 
+              <circle cx="12" cy="8" r="4"> 
+              </circle> 
+              <path d="M4 21a8 8 0 0 1 16 0"> 
+              </path> 
+            </svg>
+          </div>
+          <div>
+            <h4>Informaci&oacute;n de contacto
+            </h4>
+            <p>Persona responsable de la solicitud.
+            </p>
+          </div>
+        </div>
+        <div class="ild-fields">
+          <div class="ild-field-group"><label for="ildContact">Nombre del contacto <span class="ild-required">*</span> </label> 
+            <input id="ildContact" maxlength="100" placeholder="Nombre y apellido" required="" type="text" />
+          </div>
+          <div class="ild-field-group"><label for="ildPosition">Cargo <span class="ild-required">*</span> </label> 
+            <input id="ildPosition" maxlength="80" placeholder="Ej. Gerente comercial" required="" type="text" />
+          </div>
+          <div class="ild-field-group"><label for="ildPhone">N&uacute;mero de celular <span class="ild-required">*</span> </label> 
+            <input id="ildPhone" maxlength="20" minlength="7" placeholder="Ej. 300 123 4567" required="" type="tel" />
+          </div>
+          <div class="ild-field-group"><label for="ildEmail">Correo electr&oacute;nico <span class="ild-required">*</span> </label> 
+            <input id="ildEmail" maxlength="120" placeholder="correo@empresa.com" required="" type="email" />
+          </div>
+          <div class="ild-field-group"><label for="ildPhysicalStore">&iquest;Cuenta con punto de venta? <span class="ild-required">*</span> </label> 
+            <select id="ildPhysicalStore" required=""><option value="">Selecciona una opci&oacute;n</option><option value="Sí, un punto de venta">S&iacute;, un punto de venta</option><option value="Sí, varios puntos de venta">S&iacute;, varios puntos de venta</option><option value="No, venta virtual">No, venta virtual</option><option value="No, atención a proyectos">No, atenci&oacute;n a proyectos</option> 
+            </select>
+          </div>
+          <div class="ild-field-group"><label for="ildCoverage">Cobertura comercial <span class="ild-required">*</span> </label> 
+            <select id="ildCoverage" required=""><option value="">Selecciona una opci&oacute;n</option><option value="Local">Local</option><option value="Municipal">Municipal</option><option value="Departamental">Departamental</option><option value="Regional">Regional</option><option value="Nacional">Nacional</option> 
+            </select>
+          </div>
+        </div>
+        <div class="ild-actions">
+          <button class="ild-button ild-button-secondary" data-prev="" type="button">Anterior
+          </button>
+          <button class="ild-button ild-button-primary" data-next="" type="button"><span>Continuar</span> 
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"> 
+              <path d="m9 18 6-6-6-6"> 
+              </path> 
+            </svg>
+          </button>
+        </div>
+      </div>
+      <!-- PASO 3 -->
+      <div class="ild-step" data-step="2">
+        <div class="ild-section-title">
+          <div class="ild-section-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"> 
+              <path d="M3 3v18h18"> 
+              </path> 
+              <path d="m7 16 4-5 4 3 5-7"> 
+              </path> 
+            </svg>
+          </div>
+          <div>
+            <h4>Perfil comercial
+            </h4>
+            <p>Informaci&oacute;n para evaluar la oportunidad.
+            </p>
+          </div>
+        </div>
+        <div class="ild-fields">
+          <div class="ild-field-group"><label for="ildMonthlyPurchase">Compra mensual estimada <span class="ild-required">*</span> </label> 
+            <select id="ildMonthlyPurchase" required=""><option value="">Selecciona un rango</option><option value="Menos de $2.000.000 COP">Menos de $2.000.000 COP</option><option value="Entre $2.000.000 y $5.000.000 COP">Entre $2.000.000 y $5.000.000 COP</option><option value="Entre $5.000.001 y $10.000.000 COP">Entre $5.000.001 y $10.000.000 COP</option><option value="Entre $10.000.001 y $25.000.000 COP">Entre $10.000.001 y $25.000.000 COP</option><option value="Más de $25.000.000 COP">M&aacute;s de $25.000.000 COP</option> 
+            </select>
+          </div>
+          <div class="ild-field-group"><label for="ildMainCustomer">Tipo principal de cliente <span class="ild-required">*</span> </label> 
+            <select id="ildMainCustomer" required=""><option value="">Selecciona una opci&oacute;n</option><option value="Consumidor final">Consumidor final</option><option value="Instaladores y electricistas">Instaladores y electricistas</option><option value="Empresas y comercios">Empresas y comercios</option><option value="Constructoras">Constructoras</option><option value="Industria">Industria</option><option value="Entidades públicas">Entidades p&uacute;blicas</option><option value="Otros distribuidores">Otros distribuidores</option> 
+            </select>
+          </div>
+          <div class="ild-field-group"><label>Productos de inter&eacute;s <span class="ild-required">*</span> </label>
+            <div class="ild-products">
+              <div class="ild-product">
+                <input id="ildLighting" name="ildProducts" type="checkbox" value="Iluminación LED" /> <label for="ildLighting"> <span class="ild-check"> 
+                <svg fill="none" stroke="currentColor" stroke-width="3" viewbox="0 0 24 24"> 
+                  <path d="m5 12 4 4L19 6"> 
+                  </path> 
+                </svg> </span> Iluminaci&oacute;n LED </label>
+              </div>
+              <div class="ild-product">
+                <input id="ildElectrical" name="ildProducts" type="checkbox" value="Material eléctrico" /> <label for="ildElectrical"> <span class="ild-check"> 
+                <svg fill="none" stroke="currentColor" stroke-width="3" viewbox="0 0 24 24"> 
+                  <path d="m5 12 4 4L19 6"> 
+                  </path> 
+                </svg> </span> Material el&eacute;ctrico </label>
+              </div>
+              <div class="ild-product">
+                <input id="ildSolar" name="ildProducts" type="checkbox" value="Soluciones solares" /> <label for="ildSolar"> <span class="ild-check"> 
+                <svg fill="none" stroke="currentColor" stroke-width="3" viewbox="0 0 24 24"> 
+                  <path d="m5 12 4 4L19 6"> 
+                  </path> 
+                </svg> </span> Soluciones solares </label>
+              </div>
+              <div class="ild-product">
+                <input id="ildIndustrial" name="ildProducts" type="checkbox" value="Productos industriales" /> <label for="ildIndustrial"> <span class="ild-check"> 
+                <svg fill="none" stroke="currentColor" stroke-width="3" viewbox="0 0 24 24"> 
+                  <path d="m5 12 4 4L19 6"> 
+                  </path> 
+                </svg> </span> Productos industriales </label>
+              </div>
+            </div>
+            <span class="ild-helper" id="ildProductsHelper"> Selecciona al menos una categor&iacute;a. </span>
+          </div>
+          <div class="ild-field-group"><label for="ildSalesChannel">Canal principal de ventas <span class="ild-required">*</span> </label> 
+            <select id="ildSalesChannel" required=""><option value="">Selecciona una opci&oacute;n</option><option value="Punto de venta físico">Punto de venta f&iacute;sico</option><option value="Página web propia">P&aacute;gina web propia</option><option value="Redes sociales">Redes sociales</option><option value="Marketplaces">Marketplaces</option><option value="Ventas corporativas">Ventas corporativas</option><option value="Licitaciones y proyectos">Licitaciones y proyectos</option><option value="Varios canales">Varios canales</option> 
+            </select>
+          </div>
+          <div class="ild-field-group"><label for="ildBrands">Marcas que comercializa actualmente </label> 
+            <input id="ildBrands" maxlength="250" placeholder="Ej. Marca 1, Marca 2, Marca 3" type="text" />
+          </div>
+          <div class="ild-field-group"><label for="ildAdditional">Cu&eacute;ntanos brevemente sobre tu empresa </label><textarea id="ildAdditional" maxlength="600" placeholder="Experiencia, capacidad comercial, objetivos o información relevante."></textarea>
+          </div>
+          <div class="ild-privacy">
+            <input id="ildPrivacy" required="" type="checkbox" /> <label for="ildPrivacy"> Autorizo el tratamiento de mis datos personales para fines comerciales, de contacto y evaluaci&oacute;n de esta solicitud. <span class="ild-required">*</span> </label>
+          </div>
+        </div>
+        <div class="ild-actions">
+          <button class="ild-button ild-button-secondary" data-prev="" type="button">Anterior
+          </button>
+          <button class="ild-button ild-button-primary" id="ildSubmitButton" type="submit">
+            <svg fill="currentColor" viewbox="0 0 24 24"> 
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.074-.297-.148-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.297-.497.1-.198.05-.372-.025-.52-.074-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.372-.01-.57-.01-.198 0-.52.075-.792.372-.273.298-1.04 1.016-1.04 2.479 0 1.462 1.065 2.876 1.213 3.074.149.198 2.096 3.2 5.077 4.487"> 
+              </path> 
+            </svg> <span>Enviar por WhatsApp</span>
+          </button>
+        </div>
+      </div>
+      <div aria-live="polite" class="ild-message" id="ildFormMessage" role="alert">&nbsp;
+      </div>
+      <div class="ild-security">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"> 
+          <rect height="10" rx="2" width="18" x="3" y="11"> 
+          </rect> 
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"> 
+          </path> 
+        </svg> La informaci&oacute;n ser&aacute; utilizada &uacute;nicamente para gestionar esta solicitud comercial.
+      </div>
+    </form>
+  </div>
+</section>
+<script>
+  (function () {
+    /*
+         * Número principal de WhatsApp de ImportLED.
+         * Debe estar sin espacios, signos ni guiones.
+         */
+    const ILD_WHATSAPP_NUMBER = "573176439180";
+    const wrapper = document.getElementById("ildDistributor");
+    const form = document.getElementById("ildDistributorForm");
+    const steps = Array.from(
+      form.querySelectorAll(".ild-step")
+    );
+    const indicators = Array.from(
+      wrapper.querySelectorAll(".ild-step-indicator")
+    );
+    const progressBar = document.getElementById("ildProgressBar");
+    const messageBox = document.getElementById("ildFormMessage");
+    const submitButton =
+          document.getElementById("ildSubmitButton");
+    const productsHelper =
+          document.getElementById("ildProductsHelper");
+    let currentStep = 0;
+    function getValue(id) {
+      const element = document.getElementById(id);
+      if (!element) {
+        return "No informado";
+      }
+      return element.value.trim() || "No informado";
+    }
+    function getProducts() {
+      return Array.from(
+        form.querySelectorAll(
+          'input[name="ildProducts"]:checked'
+        )
+      ).map(function (item) {
+        return item.value;
+      });
+    }
+    function clearMessage() {
+      messageBox.textContent = "";
+      messageBox.className = "ild-message";
+    }
+    function showMessage(text, type) {
+      messageBox.textContent = text;
+      messageBox.className =
+        "ild-message " +
+        (type === "success"
+         ? "ild-success"
+         : "ild-error");
+    }
+    function showStep(index) {
+      currentStep = index;
+      steps.forEach(function (step, stepIndex) {
+        step.classList.toggle(
+          "ild-active",
+          stepIndex === index
+        );
+      });
+      indicators.forEach(function (indicator, indicatorIndex) {
+        indicator.classList.toggle(
+          "ild-active",
+          indicatorIndex === index
+        );
+        indicator.classList.toggle(
+          "ild-completed",
+          indicatorIndex < index
+        );
+      });
+      progressBar.style.width =
+        ((index + 1) / steps.length) * 100 + "%";
+      clearMessage();
+    }
+    function validateCurrentStep() {
+      const currentContainer = steps[currentStep];
+      const requiredFields = Array.from(
+        currentContainer.querySelectorAll(
+          "input[required], select[required], textarea[required]"
+        )
+      );
+      for (const field of requiredFields) {
+        if (!field.checkValidity()) {
+          field.reportValidity();
+          field.focus();
+          showMessage(
+            "Completa los campos obligatorios antes de continuar.",
+            "error"
+          );
+          return false;
+        }
+      }
+      if (currentStep === 2 && getProducts().length === 0) {
+        productsHelper.style.color = "var(--ild-danger)";
+        showMessage(
+          "Selecciona al menos una categoría de producto.",
+          "error"
+        );
+        return false;
+      }
+      productsHelper.style.color = "var(--ild-gray-400)";
+      return true;
+    }
+    function buildWhatsAppMessage() {
+      const products = getProducts();
+      return [
+        "*NUEVA SOLICITUD DE DISTRIBUIDOR IMPORTLED*",
+        "",
+        "*INFORMACIÓN DE LA EMPRESA*",
+        "Empresa: " + getValue("ildCompany"),
+        "NIT: " + getValue("ildNit"),
+        "Tipo de negocio: " + getValue("ildBusinessType"),
+        "Tiempo en el mercado: " + getValue("ildYears"),
+        "Departamento: " + getValue("ildDepartment"),
+        "Ciudad: " + getValue("ildCity"),
+        "Página web o redes: " + getValue("ildWebsite"),
+        "",
+        "*INFORMACIÓN DE CONTACTO*",
+        "Nombre: " + getValue("ildContact"),
+        "Cargo: " + getValue("ildPosition"),
+        "Celular: " + getValue("ildPhone"),
+        "Correo: " + getValue("ildEmail"),
+        "Punto de venta: " + getValue("ildPhysicalStore"),
+        "Cobertura: " + getValue("ildCoverage"),
+        "",
+        "*PERFIL COMERCIAL*",
+        "Compra mensual: " + getValue("ildMonthlyPurchase"),
+        "Cliente principal: " + getValue("ildMainCustomer"),
+        "Productos de interés: " + products.join(", "),
+        "Canal de ventas: " + getValue("ildSalesChannel"),
+        "Marcas actuales: " + getValue("ildBrands"),
+        "",
+        "*INFORMACIÓN ADICIONAL*",
+        getValue("ildAdditional"),
+        "",
+        "El solicitante autorizó el tratamiento de sus datos."
+      ].join("\n");
+    }
+    wrapper
+      .querySelectorAll("[data-next]")
+      .forEach(function (button) {
+      button.addEventListener("click", function () {
+        clearMessage();
+        if (!validateCurrentStep()) {
+          return;
+        }
+        if (currentStep < steps.length - 1) {
+          showStep(currentStep + 1);
+          wrapper.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+        }
+      });
+    });
+    wrapper
+      .querySelectorAll("[data-prev]")
+      .forEach(function (button) {
+      button.addEventListener("click", function () {
+        if (currentStep > 0) {
+          showStep(currentStep - 1);
+          wrapper.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+        }
+      });
+    });
+    form
+      .querySelectorAll('input[name="ildProducts"]')
+      .forEach(function (checkbox) {
+      checkbox.addEventListener("change", function () {
+        if (getProducts().length > 0) {
+          productsHelper.style.color =
+            "var(--ild-gray-400)";
+        }
+      });
+    });
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      clearMessage();
+      if (!validateCurrentStep()) {
+        return;
+      }
+      if (
+        !ILD_WHATSAPP_NUMBER ||
+        !/^\d{10,15}$/.test(ILD_WHATSAPP_NUMBER)
+      ) {
+        showMessage(
+          "El número de WhatsApp no está configurado correctamente.",
+          "error"
+        );
+        return;
+      }
+      const message = buildWhatsAppMessage();
+      const whatsappUrl =
+            "https://wa.me/" +
+            ILD_WHATSAPP_NUMBER +
+            "?text=" +
+            encodeURIComponent(message);
+      submitButton.disabled = true;
+      submitButton.querySelector("span").textContent =
+        "Abriendo WhatsApp...";
+      showMessage(
+        "Información validada. Serás dirigido a WhatsApp para confirmar el envío.",
+        "success"
+      );
+      setTimeout(function () {
+        window.location.href = whatsappUrl;
+        submitButton.disabled = false;
+        submitButton.querySelector("span").textContent =
+          "Enviar por WhatsApp";
+      }, 500);
+    });
+    const observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            wrapper.classList.add("ild-visible");
+            observer.disconnect();
+          }
+        });
+      },
+      {
+        threshold: 0.12
+      }
+    );
+    observer.observe(wrapper);
+    showStep(0);
+  })();
+</script>

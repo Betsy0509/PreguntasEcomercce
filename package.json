@@ -1,0 +1,8 @@
+{
+  "name": "pruebas-cloudflare",
+  "private": true,
+  "scripts": {
+    "dev": "npx wrangler@latest dev",
+    "deploy": "npx wrangler@latest deploy"
+  }
+}
