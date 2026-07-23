@@ -1032,6 +1032,51 @@
       margin-bottom: 2px;
     }
 
+    .whatsapp-preview {
+      max-height: 460px;
+      overflow: auto;
+      margin: 0;
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      color: #213047;
+      background: #f7fafc;
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 0.82rem;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .whatsapp-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .whatsapp-meta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px 16px;
+      margin-top: 10px;
+      color: var(--text-soft);
+      font-size: 0.76rem;
+    }
+
+    .whatsapp-warning {
+      margin-top: 14px;
+      padding: 13px 14px;
+      border: 1px solid #f0d79c;
+      border-radius: 12px;
+      color: #705011;
+      background: #fff8e9;
+      font-size: 0.78rem;
+      line-height: 1.5;
+    }
+
+
     .toast {
       position: fixed;
       right: 20px;
@@ -1409,7 +1454,7 @@
             <div class="action-group">
               <button type="button" class="btn btn-secondary" id="saveDraftBtn">Guardar visualmente</button>
               <button type="button" class="btn btn-primary" id="nextBtn">Continuar</button>
-              <button type="submit" class="btn btn-success" id="submitBtn" hidden>Finalizar solicitud</button>
+              <button type="submit" class="btn btn-success" id="submitBtn" hidden>Enviar por WhatsApp</button>
             </div>
           </div>
         </form>
@@ -1943,6 +1988,173 @@
       return first.value || "";
     }
 
+
+    const WHATSAPP_NUMBER = "573133662078";
+    let lastWhatsAppMessage = "";
+
+    function cleanQuestionLabel(label) {
+      return String(label || "")
+        .replace(/^\s*\d+\.\s*/, "")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function normalizeAnswer(value) {
+      return String(value || "")
+        .replace(/\r\n/g, "\n")
+        .replace(/[ \t]+\n/g, "\n")
+        .replace(/\n{3,}/g, "\n\n")
+        .trim();
+    }
+
+    function formatMessageAnswer(label, value) {
+      const cleanLabel = cleanQuestionLabel(label);
+      const cleanValue = normalizeAnswer(value);
+      if (!cleanValue) return "";
+
+      if (cleanValue.length <= 115 && !cleanValue.includes("\n")) {
+        return `• ${cleanLabel}: ${cleanValue}`;
+      }
+
+      const indented = cleanValue
+        .split("\n")
+        .map(line => `  ${line}`)
+        .join("\n");
+
+      return `• ${cleanLabel}:\n${indented}`;
+    }
+
+    function generateRequestCode() {
+      const now = new Date();
+      const pad = value => String(value).padStart(2, "0");
+      return `SOL-${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}`;
+    }
+
+    function buildWhatsAppMessage() {
+      const companyName = document.getElementById("companyName").value.trim();
+      const website = document.getElementById("website").value.trim();
+      const contactName = document.getElementById("contactName").value.trim();
+      const contactRole = document.getElementById("contactRole").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const priority = document.getElementById("generalPriority").value.trim();
+      const date = document.getElementById("requestDate").value.trim();
+      const context = document.getElementById("generalContext").value.trim();
+      const requestCode = generateRequestCode();
+
+      const lines = [
+        "*NUEVA SOLICITUD DE GESTIÓN E-COMMERCE*",
+        `*Código:* ${requestCode}`,
+        "",
+        "*DATOS DE LA EMPRESA*",
+        `• Empresa: ${companyName || "No indicada"}`,
+        `• Página web: ${website || "No indicada"}`,
+        `• Responsable: ${contactName || "No indicado"}${contactRole ? `, ${contactRole}` : ""}`,
+        `• Correo: ${email || "No indicado"}`,
+        `• WhatsApp o teléfono: ${phone || "No indicado"}`,
+        `• Prioridad: ${priority || "No definida"}`,
+        `• Fecha esperada: ${date || "No definida"}`
+      ];
+
+      if (context) {
+        lines.push("", "*OBJETIVO GENERAL*", context);
+      }
+
+      let hasFiles = false;
+      let sectionNumber = 1;
+
+      [...selectedNeeds].forEach(id => {
+        const definition = sectionDefinitions[id];
+        const containers = [...dynamicSections.querySelectorAll(`[data-section-id="${id}"]`)]
+          .filter(container => !container.classList.contains("condition-field") || container.classList.contains("visible"));
+
+        const answers = containers.map(container => {
+          const value = getContainerAnswer(container);
+          const firstControl = container.querySelector("input, textarea, select");
+          if (firstControl?.type === "file" && value) hasFiles = true;
+
+          return {
+            label: container.dataset.questionLabel,
+            value
+          };
+        }).filter(answer => normalizeAnswer(answer.value));
+
+        if (!answers.length) return;
+
+        lines.push(
+          "",
+          "━━━━━━━━━━━━━━━━━━━━",
+          `*${sectionNumber}. ${definition.title.toUpperCase()}*`,
+          ""
+        );
+
+        answers.forEach(answer => {
+          const formatted = formatMessageAnswer(answer.label, answer.value);
+          if (formatted) lines.push(formatted);
+        });
+
+        sectionNumber += 1;
+      });
+
+      if (hasFiles) {
+        lines.push(
+          "",
+          "━━━━━━━━━━━━━━━━━━━━",
+          "*ARCHIVOS*",
+          "Los nombres de los archivos seleccionados aparecen en las respuestas. Deben adjuntarse manualmente en este chat después de enviar el mensaje."
+        );
+      }
+
+      lines.push(
+        "",
+        "━━━━━━━━━━━━━━━━━━━━",
+        "*CONFIRMACIÓN*",
+        "Declaro que la información suministrada corresponde a la solicitud y puede utilizarse para ejecutar los cambios indicados."
+      );
+
+      return lines.join("\n").replace(/\n{3,}/g, "\n\n").trim();
+    }
+
+    async function copyTextToClipboard(text) {
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      } catch (error) {
+        console.warn("No se pudo usar el portapapeles moderno.", error);
+      }
+
+      const temporary = document.createElement("textarea");
+      temporary.value = text;
+      temporary.setAttribute("readonly", "");
+      temporary.style.position = "fixed";
+      temporary.style.opacity = "0";
+      document.body.appendChild(temporary);
+      temporary.select();
+
+      let copied = false;
+      try {
+        copied = document.execCommand("copy");
+      } catch (error) {
+        console.warn("No se pudo copiar el mensaje.", error);
+      }
+
+      temporary.remove();
+      return copied;
+    }
+
+    function getWhatsAppUrl(message) {
+      const encodedMessage = encodeURIComponent(message);
+      const cleanedNumber = WHATSAPP_NUMBER.replace(/\D/g, "");
+
+      if (cleanedNumber) {
+        return `https://wa.me/${cleanedNumber}?text=${encodedMessage}`;
+      }
+
+      return `https://wa.me/?text=${encodedMessage}`;
+    }
+
     function renderSummary() {
       const companyName = document.getElementById("companyName").value || "Sin información";
       const website = document.getElementById("website").value || "No indicada";
@@ -2009,13 +2221,47 @@
         </div>
 
         <div class="summary-block">
-          <h4>Estado del módulo</h4>
+          <h4>Vista previa del mensaje de WhatsApp</h4>
+          <pre class="whatsapp-preview" id="whatsappPreview"></pre>
+          <div class="whatsapp-meta">
+            <span id="whatsappCharacterCount">0 caracteres</span>
+            <span>Solo se incluyen campos diligenciados</span>
+          </div>
+          <div class="whatsapp-actions">
+            <button type="button" class="btn btn-secondary" id="copyWhatsAppBtn">Copiar mensaje</button>
+          </div>
+          <div class="whatsapp-warning">
+            Los enlaces de WhatsApp permiten preparar el texto, pero no adjuntar automáticamente los archivos seleccionados. El cliente deberá agregarlos manualmente al chat.
+          </div>
+        </div>
+
+        <div class="summary-block">
+          <h4>Envío de la solicitud</h4>
           <p style="margin:0; color:var(--text-soft); line-height:1.6;">
-            El levantamiento contiene preguntas obligatorias, preguntas condicionales y un resumen completo.
-            La siguiente etapa puede conectar el envío con correo, WhatsApp, Google Sheets, CRM o una base de datos.
+            Al presionar <strong>Enviar por WhatsApp</strong>, se copiará el mensaje completo y se abrirá WhatsApp con la información organizada.
           </p>
         </div>
       `;
+
+      lastWhatsAppMessage = buildWhatsAppMessage();
+      const preview = document.getElementById("whatsappPreview");
+      const counter = document.getElementById("whatsappCharacterCount");
+      const copyButton = document.getElementById("copyWhatsAppBtn");
+
+      if (preview) preview.textContent = lastWhatsAppMessage;
+      if (counter) counter.textContent = `${lastWhatsAppMessage.length.toLocaleString("es-CO")} caracteres`;
+
+      if (copyButton) {
+        copyButton.addEventListener("click", async () => {
+          const copied = await copyTextToClipboard(lastWhatsAppMessage);
+          showToast(
+            copied ? "Mensaje copiado" : "No fue posible copiar",
+            copied
+              ? "El mensaje completo quedó disponible en el portapapeles."
+              : "Selecciona manualmente el texto de la vista previa."
+          );
+        });
+      }
     }
 
     function escapeHtml(value) {
@@ -2083,9 +2329,29 @@
       showToast("Borrador guardado", "Las respuestas quedaron guardadas temporalmente en este navegador.");
     });
 
-    form.addEventListener("submit", event => {
+    form.addEventListener("submit", async event => {
       event.preventDefault();
-      showToast("Solicitud preparada", "La interfaz funciona correctamente. El envío real se conectará en una siguiente etapa.");
+
+      if (!validateCurrentStep()) return;
+
+      const message = buildWhatsAppMessage();
+      if (!message) {
+        showToast("No hay información", "Completa la solicitud antes de enviarla.");
+        return;
+      }
+
+      lastWhatsAppMessage = message;
+      const copied = await copyTextToClipboard(message);
+      const whatsappUrl = getWhatsAppUrl(message);
+
+      showToast(
+        "Abriendo WhatsApp",
+        copied
+          ? "El mensaje también quedó copiado por si necesitas pegarlo manualmente."
+          : "WhatsApp se abrirá con el mensaje organizado."
+      );
+
+      window.open(whatsappUrl, "_blank", "noopener,noreferrer");
     });
 
     function loadDraft() {
